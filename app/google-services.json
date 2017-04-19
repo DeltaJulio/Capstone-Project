@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "1053389274871",
+    "firebase_url": "https://pantrybank-60f95.firebaseio.com",
+    "project_id": "pantrybank-60f95",
+    "storage_bucket": "pantrybank-60f95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053389274871:android:71c92f07603c3ba2",
+        "android_client_info": {
+          "package_name": "io.github.deltajulio.pantrybank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053389274871-d649shriu34cdmen136ipm8fgdfvcrjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDii4twep7RctsJb0PeotV1iTO65AEZhZ8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053389274871:android:991d1f955b891ef8",
+        "android_client_info": {
+          "package_name": "io.github.deltajulio.pantrybank.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053389274871-f0q9hg52mn44rlta1g2qgtb1flgjctdc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.deltajulio.pantrybank.debug",
+            "certificate_hash": "be345352d422bc13e2144c6143f9910b745b5db7"
+          }
+        },
+        {
+          "client_id": "1053389274871-d649shriu34cdmen136ipm8fgdfvcrjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDii4twep7RctsJb0PeotV1iTO65AEZhZ8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053389274871-d649shriu34cdmen136ipm8fgdfvcrjq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
