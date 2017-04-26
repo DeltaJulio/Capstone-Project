@@ -1,11 +1,15 @@
 package io.github.deltajulio.pantrybank.data;
 
+import android.util.Log;
+
 /**
  * TODO: add a class header comment
  */
 
 public class FoodItem
 {
+    private final String TAG = "FoodItem";
+
     public enum QuantityType
     {
         NULL, NUMERICAL, APPROXIMATE
@@ -17,9 +21,9 @@ public class FoodItem
 
     private String name;
     private boolean isPinned;
-    private QuantityType quantityType;
+    private String quantityType;
     private long quantityNum;
-    private QuantityApprox quantityApprox;
+    private String quantityApprox;
 
     @SuppressWarnings("unused")
     public FoodItem() { /*Needed for Firebase ui*/ }
@@ -28,28 +32,28 @@ public class FoodItem
     {
         this.name = name;
         this.isPinned = isPinned;
-        this.quantityType = quantityType;
+        this.quantityType = quantityType.toString();
         this.quantityNum = quantityNum;
-        this.quantityApprox = quantityApprox;
+        this.quantityApprox = quantityApprox.toString();
     }
 
-    public String GetName() { return name; }
+    public String getName() { return name; }
 
-    public void SetName(String name) { this.name = name; }
+    public void setName(String name) { this.name = name; }
 
-    public boolean GetIsPinned() { return isPinned; }
+    public boolean getIsPinned() { return isPinned; }
 
-    public void SetIsPinned(boolean isPinned) { this.isPinned = isPinned; }
+    public void setIsPinned(boolean isPinned) { this.isPinned = isPinned; }
 
-    public QuantityType GetQuantityType() { return quantityType; }
+    public QuantityType getQuantityType() { return QuantityType.valueOf(quantityType); }
 
-    public void SetQuantityType(QuantityType quantityType) { this.quantityType = quantityType; }
+    public void setQuantityType(QuantityType quantityType) { this.quantityType = quantityType.toString(); }
 
-    public long GetQuantityNum() { return quantityNum; }
+    public long getQuantityNum() { return quantityNum; }
 
-    public void SetQuantityNum(long quantityNum) { this.quantityNum = quantityNum; }
+    public void setQuantityNum(long quantityNum) { this.quantityNum = quantityNum; }
 
-    public QuantityApprox GetQuantityApprox() { return quantityApprox; }
+    public QuantityApprox getQuantityApprox() { return QuantityApprox.valueOf(quantityApprox); }
 
-    public void SetQuantityApprox(QuantityApprox quantityApprox) { this.quantityApprox = quantityApprox; }
+    public void setQuantityApprox(QuantityApprox quantityApprox) { this.quantityApprox = quantityApprox.toString(); }
 }

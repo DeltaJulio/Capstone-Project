@@ -1,7 +1,7 @@
 package io.github.deltajulio.pantrybank.ui;
 
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -15,6 +15,7 @@ import io.github.deltajulio.pantrybank.data.FoodItem;
  */
 public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, PantryFoodHolder> implements PantryOnClickListener
 {
+    private static final String TAG = "PantryRecycleAdapter";
     private final Database database;
 
     public PantryRecyclerAdapter(Class<FoodItem> modelClass, int modelLayout,
@@ -35,15 +36,17 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     @Override
     protected void populateViewHolder(PantryFoodHolder viewHolder, FoodItem item, int position)
     {
-        viewHolder.SetItemName(item.GetName());
-        viewHolder.SetIsPinned(item.GetIsPinned());
+        viewHolder.SetItemName(item.getName());
+        viewHolder.SetIsPinned(item.getIsPinned());
 
-        if (item.GetQuantityType() == FoodItem.QuantityType.NUMERICAL)
+        Log.d(TAG, item.getName());
+        Log.d(TAG, item.getQuantityType().toString());
+        if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
         {
-            viewHolder.SetItemQuantity(String.valueOf(item.GetQuantityNum()));
+            viewHolder.SetItemQuantity(String.valueOf(item.getQuantityNum()));
         } else
         {
-            viewHolder.SetItemQuantity(item.GetQuantityApprox().toString());
+            viewHolder.SetItemQuantity(item.getQuantityApprox().toString());
         }
     }
 
@@ -51,7 +54,7 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     public void OnPinClicked(final int position)
     {
         FoodItem item = getItem(position);
-        database.UpdateIsPinned(item.GetName(), !item.GetIsPinned());
+        database.UpdateIsPinned(item.getName(), !item.getIsPinned());
     }
 
     @Override
