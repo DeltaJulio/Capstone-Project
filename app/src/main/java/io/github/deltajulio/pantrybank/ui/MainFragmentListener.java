@@ -1,10 +1,12 @@
 package io.github.deltajulio.pantrybank.ui;
 
+import io.github.deltajulio.pantrybank.data.Database;
+
 /**
- * Created by Bryan on 25-Apr-17.
+ * Allows classes down the chain to update database information
  */
 
 public interface MainFragmentListener
 {
-    public void OnEdit();
+    Database GetDatabase();
 }

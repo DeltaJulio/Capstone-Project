@@ -54,6 +54,7 @@
         </LinearLayout>
 
         <ToggleButton
+            android:id="@+id/button_drop_down"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"

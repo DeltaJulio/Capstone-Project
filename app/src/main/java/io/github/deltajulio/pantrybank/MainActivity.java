@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import io.github.deltajulio.pantrybank.R;
 import io.github.deltajulio.pantrybank.data.Database;
+import io.github.deltajulio.pantrybank.data.FoodItem;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
      */
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
+    private Database database;
 
     /**
      * View Objects
@@ -79,13 +81,17 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
             }
         };
 
+        // Create database handler
+        database = new Database(auth.getCurrentUser().getUid());
+
         // Set up view pager
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), MainActivity.this));
         tabLayout.setupWithViewPager(viewPager);
 
         // DEBUG
-        Database.AddItem();
+        FoodItem testItem = new FoodItem("eggs", false, FoodItem.QuantityType.NUMERICAL, 5, FoodItem.QuantityApprox.NULL);
+        database.AddItem(testItem);
     }
 
     @Override
@@ -112,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     }
 
     @Override
-    public void OnEdit()
+    public Database GetDatabase()
     {
-        // TODO: open edit item screen
+        return database;
     }
 }

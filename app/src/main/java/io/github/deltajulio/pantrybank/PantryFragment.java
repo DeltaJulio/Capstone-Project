@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import io.github.deltajulio.pantrybank.data.FoodItem;
+import io.github.deltajulio.pantrybank.ui.PantryFoodHolder;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
+import io.github.deltajulio.pantrybank.ui.PantryRecyclerAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -22,7 +25,9 @@ import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
  */
 public class PantryFragment extends Fragment
 {
-    private MainFragmentListener mListener;
+    DatabaseReference reference;
+    PantryRecyclerAdapter recyclerAdapter;
+    private MainFragmentListener listener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +48,7 @@ public class PantryFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-
+        reference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -53,14 +58,22 @@ public class PantryFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_pantry_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView)
-        {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new MyPantryRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        RecyclerView recyclerView = (RecyclerView) view;
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerAdapter = new PantryRecyclerAdapter(FoodItem.class, R.layout.pantry_item,
+                PantryFoodHolder.class, reference, listener);
+        recyclerView.setAdapter(recyclerAdapter);
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+
+        recyclerAdapter.cleanup();
     }
 
 
@@ -70,7 +83,7 @@ public class PantryFragment extends Fragment
         super.onAttach(context);
         if (context instanceof MainFragmentListener)
         {
-            mListener = (MainFragmentListener) context;
+            listener = (MainFragmentListener) context;
         } else
         {
             throw new RuntimeException(context.toString()
@@ -82,7 +95,6 @@ public class PantryFragment extends Fragment
     public void onDetach()
     {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
-
 }
