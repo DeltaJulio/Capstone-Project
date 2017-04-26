@@ -2,6 +2,7 @@ package io.github.deltajulio.pantrybank;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,10 +78,6 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                     // Create database handler
                     database = new Database(auth.getCurrentUser().getUid());
 
-                    // DEBUG
-                    FoodItem testItem = new FoodItem("eggs", false, FoodItem.QuantityType.NUMERICAL, 5, FoodItem.QuantityApprox.NULL);
-                    database.AddItem(testItem);
-
                     // Set up view pager
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
                     viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), MainActivity.this));
@@ -92,6 +90,24 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                 }
             }
         };
+
+        // setup FAB onclick
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (database != null)
+                {
+                    Log.d(TAG, "fab:onClick: adding item");
+
+                    // DEBUG
+                    FoodItem testItem = new FoodItem("milk", false, FoodItem.QuantityType.APPROXIMATE, -1, FoodItem.QuantityApprox.NORMAL);
+                    database.AddItem(testItem);
+                }
+            }
+        });
     }
 
     @Override
