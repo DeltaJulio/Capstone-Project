@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
 
                     // DEBUG
                     FoodItem testItem = new FoodItem("eggs", false, FoodItem.QuantityType.NUMERICAL, 5, FoodItem.QuantityApprox.NULL);
-                    //database.AddItem(testItem);
+                    database.AddItem(testItem);
 
                     // Set up view pager
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
