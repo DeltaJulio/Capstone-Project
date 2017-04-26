@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import io.github.deltajulio.pantrybank.MainActivity;
 import io.github.deltajulio.pantrybank.R;
 
 /**
