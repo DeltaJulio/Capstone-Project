@@ -72,6 +72,18 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                 {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:logged_in:" + user.getUid());
+
+                    // Create database handler
+                    database = new Database(auth.getCurrentUser().getUid());
+
+                    // DEBUG
+                    FoodItem testItem = new FoodItem("eggs", false, FoodItem.QuantityType.NUMERICAL, 5, FoodItem.QuantityApprox.NULL);
+                    //database.AddItem(testItem);
+
+                    // Set up view pager
+                    ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                    viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), MainActivity.this));
+                    tabLayout.setupWithViewPager(viewPager);
                 } else
                 {
                     // User is signed out
@@ -80,18 +92,6 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                 }
             }
         };
-
-        // Create database handler
-        database = new Database(auth.getCurrentUser().getUid());
-
-        // Set up view pager
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), MainActivity.this));
-        tabLayout.setupWithViewPager(viewPager);
-
-        // DEBUG
-        FoodItem testItem = new FoodItem("eggs", false, FoodItem.QuantityType.NUMERICAL, 5, FoodItem.QuantityApprox.NULL);
-        database.AddItem(testItem);
     }
 
     @Override
