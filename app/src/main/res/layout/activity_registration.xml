@@ -25,7 +25,7 @@
         style="@style/AuthenticationLabel"
         >
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/input_email"
             style="@style/AuthenticationText"
             android:inputType="textEmailAddress"
@@ -38,7 +38,7 @@
         style="@style/AuthenticationLabel"
         >
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/input_password"
             style="@style/AuthenticationText"
             android:inputType="textPassword"
