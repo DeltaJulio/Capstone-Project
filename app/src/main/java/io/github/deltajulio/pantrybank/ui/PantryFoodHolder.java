@@ -1,6 +1,7 @@
 package io.github.deltajulio.pantrybank.ui;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -16,6 +17,8 @@ import io.github.deltajulio.pantrybank.R;
 
 public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.OnClickListener
 {
+    private static final String TAG = "PantryFoodHolder";
+
     private TextView itemName;
     private TextView itemQuantity;
     private CheckBox itemPin;
@@ -43,7 +46,7 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
 
     public void SetItemName(String name) { itemName.setText(name); }
 
-    public void SetItemQuantity(String quantity) { itemQuantity.setText(quantity); }
+    public void SetItemQuantity(String quantity) { itemQuantity.setText(quantity.toLowerCase()); }
 
     public void SetIsPinned(boolean isPinned) { itemPin.setChecked(isPinned); }
 
@@ -72,13 +75,13 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
     @Override
     public void onClick(View v)
     {
-        if (itemView.getId() == itemPin.getId())
+        if (v.getId() == itemPin.getId())
         {
             onClickListener.OnPinClicked(getAdapterPosition());
-        } else if (itemView.getId() == dropDown.getId())
+        } else if (v.getId() == dropDown.getId())
         {
             onClickListener.OnDropDownClicked(getAdapterPosition(), this);
-        } else if (itemView.getId() == buttonEdit.getId())
+        } else if (v.getId() == buttonEdit.getId())
         {
             onClickListener.OnEditClicked(getAdapterPosition());
         }
