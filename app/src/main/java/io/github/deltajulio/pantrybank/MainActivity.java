@@ -22,6 +22,7 @@ import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
 {
     private static final String TAG = "MainActivity";
+    private static final String EXTRA_TAB = "io.github.deltajulio.pantrybank.CURRENT_TAB";
 
     /**
      * Firebase Objects
@@ -98,11 +99,11 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
             {
                 if (database != null)
                 {
-                    Log.d(TAG, "fab:onClick: adding item");
-
-                    // DEBUG
-                    FoodItem testItem = new FoodItem("milk", false, FoodItem.QuantityType.APPROXIMATE, -1, FoodItem.QuantityApprox.NORMAL);
-                    database.AddItem(testItem);
+                    // Launch new item activity
+                    Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
+                    intent.putExtra(EXTRA_TAB,
+                            tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                    startActivity(intent);
                 }
             }
         });

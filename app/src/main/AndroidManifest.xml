@@ -22,13 +22,18 @@
         <activity
             android:name=".auth.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme"
-            >
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name=".auth.RegistrationActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".NewItemActivity"
+            android:label="@string/title_activity_new_item"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             >
         </activity>
     </application>
