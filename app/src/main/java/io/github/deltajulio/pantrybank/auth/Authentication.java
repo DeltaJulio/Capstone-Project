@@ -1,4 +1,4 @@
-package io.github.deltajulio.pantrybank;
+package io.github.deltajulio.pantrybank.auth;
 
 import android.text.TextUtils;
 import android.util.Patterns;

@@ -1,8 +1,7 @@
-package io.github.deltajulio.pantrybank;
+package io.github.deltajulio.pantrybank.auth;
 
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import io.github.deltajulio.pantrybank.R;
 
 public class RegistrationActivity extends AppCompatActivity
 {

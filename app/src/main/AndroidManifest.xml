@@ -20,13 +20,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".auth.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme"
             >
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".auth.RegistrationActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme"
             >
