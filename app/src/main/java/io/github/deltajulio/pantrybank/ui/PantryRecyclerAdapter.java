@@ -61,7 +61,6 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     public void OnDropDownClicked(final int position, PantryFoodHolder holder)
     {
         ToggleButton dropDown = holder.GetDropDown();
-        holder.SetDropDownChecked(!dropDown.isChecked());
         holder.SetActionListVisibility(dropDown.isChecked() ? View.VISIBLE : View.GONE);
     }
 
