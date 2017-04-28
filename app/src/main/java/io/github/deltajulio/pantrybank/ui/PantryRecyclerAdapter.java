@@ -43,10 +43,10 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
         Log.d(TAG, item.getQuantityType().toString());
         if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
         {
-            viewHolder.SetItemQuantity(String.valueOf(item.getQuantityNum()));
+            viewHolder.SetItemQuantity(String.valueOf(item.GetQuantityLong()));
         } else
         {
-            viewHolder.SetItemQuantity(item.getQuantityApprox().toString());
+            viewHolder.SetItemQuantity(item.GetQuantityEnum().toString());
         }
     }
 

@@ -22,41 +22,57 @@ public class FoodItem
     private String name;
     private boolean isPinned;
     private String quantityType;
-    private long quantityNum;
-    private String quantityApprox;
+    private String quantity;
     private String foodId;
 
     @SuppressWarnings("unused")
     public FoodItem() { /*Needed for Firebase ui*/ }
 
-    public FoodItem(String name, boolean isPinned, QuantityType quantityType, long quantityNum, QuantityApprox quantityApprox)
+    private FoodItem(String name, boolean isPinned, QuantityType quantityType, String quantity)
     {
-        this.name = name;
-        this.isPinned = isPinned;
-        this.quantityType = quantityType.toString();
-        this.quantityNum = quantityNum;
-        this.quantityApprox = quantityApprox.toString();
+        setName(name);
+        setIsPinned(isPinned);
+        setQuantityType(quantityType);
+        setQuantity(quantity);
     }
 
-    public String getName() { return name; }
+    public FoodItem(String name, boolean isPinned, long quantityNum)
+    {
+        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum));
+    }
+
+    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox)
+    {
+        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString());
+    }
+
+    public final String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
 
-    public boolean getIsPinned() { return isPinned; }
+    public final boolean getIsPinned() { return isPinned; }
 
     public void setIsPinned(boolean isPinned) { this.isPinned = isPinned; }
 
-    public QuantityType getQuantityType() { return QuantityType.valueOf(quantityType); }
+    public final QuantityType getQuantityType() { return QuantityType.valueOf(quantityType); }
 
     public void setQuantityType(QuantityType quantityType) { this.quantityType = quantityType.toString(); }
 
-    public long getQuantityNum() { return quantityNum; }
+    /**
+     * For retrieving database value ONLY. Use long or enum return value instead.
+     */
+    public final String getQuantity() { return quantity; }
 
-    public void setQuantityNum(long quantityNum) { this.quantityNum = quantityNum; }
+    /**
+     * For setting database value ONLY. Use long or enum param version instead.
+     */
+    public void setQuantity(String quantity) { this.quantity = quantity; }
 
-    public QuantityApprox getQuantityApprox() { return QuantityApprox.valueOf(quantityApprox); }
+    public final long GetQuantityLong() { return Long.parseLong(quantity);}
+    public void SetQuantityLong(long quantity) { this.quantity = String.valueOf(quantity); }
 
-    public void setQuantityApprox(QuantityApprox quantityApprox) { this.quantityApprox = quantityApprox.toString(); }
+    public final QuantityApprox GetQuantityEnum() { return QuantityApprox.valueOf(quantity); }
+    public void SetQuantityEnum(QuantityApprox quantity) { this.quantity = quantity.toString(); }
 
     public String getFoodId() { return foodId; }
 
