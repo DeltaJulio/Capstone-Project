@@ -7,7 +7,7 @@ import android.widget.ToggleButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
-import io.github.deltajulio.pantrybank.data.Database;
+import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
 
 /**
@@ -16,14 +16,14 @@ import io.github.deltajulio.pantrybank.data.FoodItem;
 public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, PantryFoodHolder> implements PantryOnClickListener
 {
     private static final String TAG = "PantryRecycleAdapter";
-    private final Database database;
+    private final DatabaseHandler databaseHandler;
 
     public PantryRecyclerAdapter(Class<FoodItem> modelClass, int modelLayout,
                                  Class<PantryFoodHolder> viewHolderClass, Query ref,
                                  MainFragmentListener onClickListener)
     {
         super(modelClass, modelLayout, viewHolderClass, ref);
-        database = onClickListener.GetDatabase();
+        databaseHandler = onClickListener.GetDatabase();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     public void OnPinClicked(final int position)
     {
         FoodItem item = getItem(position);
-        database.UpdateIsPinned(item.getName(), !item.getIsPinned());
+        databaseHandler.UpdateIsPinned(item.getName(), !item.getIsPinned());
     }
 
     @Override

@@ -15,8 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import io.github.deltajulio.pantrybank.auth.LoginActivity;
-import io.github.deltajulio.pantrybank.data.Database;
-import io.github.deltajulio.pantrybank.data.FoodItem;
+import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
      */
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
-    private Database database;
+    private DatabaseHandler databaseHandler;
 
     /**
      * View Objects
@@ -74,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:logged_in:" + user.getUid());
 
-                    // Create database handler
-                    database = new Database(auth.getCurrentUser().getUid());
+                    // Create databaseHandler handler
+                    databaseHandler = new DatabaseHandler(auth.getCurrentUser().getUid());
 
                     // Set up view pager
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
             @Override
             public void onClick(View v)
             {
-                if (database != null)
+                if (databaseHandler != null)
                 {
                     // Launch new item activity
                     Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
@@ -133,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     }
 
     @Override
-    public Database GetDatabase()
+    public DatabaseHandler GetDatabase()
     {
-        return database;
+        return databaseHandler;
     }
 }

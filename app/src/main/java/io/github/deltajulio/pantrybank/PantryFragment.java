@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import io.github.deltajulio.pantrybank.data.Database;
+import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
 import io.github.deltajulio.pantrybank.ui.PantryFoodHolder;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
@@ -57,7 +57,7 @@ public class PantryFragment extends Fragment
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_pantry_list, container, false);
-        Database databaseHandler = listener.GetDatabase();
+        DatabaseHandler databaseHandlerHandler = listener.GetDatabase();
 
         // Set the adapter
         RecyclerView recyclerView = (RecyclerView) view;
@@ -65,9 +65,9 @@ public class PantryFragment extends Fragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerAdapter = new PantryRecyclerAdapter(FoodItem.class, R.layout.pantry_item,
                 PantryFoodHolder.class,
-                reference.child(Database.USER_PATH)
-                        .child(databaseHandler.GetUserId())
-                        .child(Database.ITEMS)
+                reference.child(DatabaseHandler.USER_PATH)
+                        .child(databaseHandlerHandler.GetUserId())
+                        .child(DatabaseHandler.ITEMS)
                 , listener);
         recyclerView.setAdapter(recyclerAdapter);
 

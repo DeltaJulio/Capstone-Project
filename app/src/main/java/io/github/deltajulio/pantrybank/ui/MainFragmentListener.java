@@ -1,6 +1,6 @@
 package io.github.deltajulio.pantrybank.ui;
 
-import io.github.deltajulio.pantrybank.data.Database;
+import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 
 /**
  * Allows classes down the chain to update database information
@@ -8,5 +8,5 @@ import io.github.deltajulio.pantrybank.data.Database;
 
 public interface MainFragmentListener
 {
-    Database GetDatabase();
+    DatabaseHandler GetDatabase();
 }

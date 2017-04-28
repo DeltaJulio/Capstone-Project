@@ -11,16 +11,13 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.github.deltajulio.pantrybank.data.Database;
+import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 
 public class NewItemActivity extends AppCompatActivity
 {
@@ -29,7 +26,7 @@ public class NewItemActivity extends AppCompatActivity
     /**
      * Firebase Objects
      */
-    private Database database;
+    private DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,10 +34,10 @@ public class NewItemActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        // Instantiate database handler
+        // Instantiate databaseHandler handler
         try
         {
-            database = new Database(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            databaseHandler = new DatabaseHandler(FirebaseAuth.getInstance().getCurrentUser().getUid());
         } catch (NullPointerException e)
         {
             Log.d(TAG, "onCreate: getCurrentUser() returned NULL");
@@ -69,10 +66,10 @@ public class NewItemActivity extends AppCompatActivity
 
     private void PopulateCategorySpinner()
     {
-        database.GetDatabaseReference()
-                .child(Database.USER_PATH)
-                .child(database.GetUserId())
-                .child(Database.CATEGORIES)
+        databaseHandler.GetDatabaseReference()
+                .child(DatabaseHandler.USER_PATH)
+                .child(databaseHandler.GetUserId())
+                .child(DatabaseHandler.CATEGORIES)
                 .addListenerForSingleValueEvent(new ValueEventListener()
                 {
                     @Override
@@ -115,7 +112,7 @@ public class NewItemActivity extends AppCompatActivity
         {
             case R.id.action_done:
             {
-                // TODO: add food item to database
+                // TODO: add food item to databaseHandler
             }
             default:
             {

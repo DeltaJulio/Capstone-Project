@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Utility class for dealing with the Firebase database
  */
-public class Database
+public class DatabaseHandler
 {
     private static final String TAG = "DatabaseHandler";
 
@@ -31,7 +31,7 @@ public class Database
     private DatabaseReference databaseReference;
     private final String userId;
 
-    public Database(String userId)
+    public DatabaseHandler(String userId)
     {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         this.userId = userId;
