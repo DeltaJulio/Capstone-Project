@@ -13,8 +13,13 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import io.github.deltajulio.pantrybank.auth.LoginActivity;
+import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 
@@ -76,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                     // Create databaseHandler handler
                     databaseHandler = new DatabaseHandler(auth.getCurrentUser().getUid());
 
+                    // TODO: find a better solution
+                    AddDefaultCategory();
+
                     // Set up view pager
                     ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
                     viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), MainActivity.this));
@@ -135,5 +143,53 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     public DatabaseHandler GetDatabase()
     {
         return databaseHandler;
+    }
+
+    private void AddDefaultCategory()
+    {
+        // Create the "uncategorized" category if it does not exist.
+        DatabaseReference ref = databaseHandler.GetDatabaseReference()
+                .child(DatabaseHandler.USER_PATH)
+                .child(auth.getCurrentUser().getUid())
+                .child(DatabaseHandler.CATEGORIES);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                {
+                    if (child.child(Category.NAME).getValue().toString()
+                            .equals(getResources().getString(R.string.uncategorized)))
+                    {
+                        return;
+                    }
+                }
+
+                DatabaseReference ref = databaseHandler.GetDatabaseReference()
+                        .child(DatabaseHandler.USER_PATH)
+                        .child(auth.getCurrentUser().getUid())
+                        .child(DatabaseHandler.CATEGORIES);
+
+                String categoryId = ref.push().getKey();
+                Category category = new Category(getResources().getString(R.string.uncategorized),
+                        categoryId);
+
+                ref.child(categoryId).setValue(category);
+
+                Log.d(TAG, "AddDefaultCategory:onDataChange: default category created");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                Log.d(TAG, "AddDefaultCategory:onCancelled", databaseError.toException());
+            }
+        });
+
+        String categoryId = ref.child(DatabaseHandler.USER_PATH)
+                .child(auth.getCurrentUser().getUid())
+                .child(DatabaseHandler.CATEGORIES).push().getKey();
     }
 }

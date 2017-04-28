@@ -43,4 +43,6 @@
         <item>Numerical</item>
         <item>Approximate</item>
     </string-array>
+
+    <string name="uncategorized">uncategorized</string>
 </resources>

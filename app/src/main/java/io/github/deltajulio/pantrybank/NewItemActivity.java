@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
 
@@ -95,7 +96,7 @@ public class NewItemActivity extends AppCompatActivity
 
                         for (DataSnapshot category : dataSnapshot.getChildren())
                         {
-                            categories.add(category.getValue().toString());
+                            categories.add(category.child(Category.NAME).getValue().toString());
                         }
 
                         // Pass categories to category spinner
@@ -131,7 +132,8 @@ public class NewItemActivity extends AppCompatActivity
                 String name = nameText.getText().toString();
                 String category = categorySpinner.getSelectedItem().toString();
                 FoodItem.QuantityType quantityType =
-                        FoodItem.QuantityType.valueOf(quantitySpinner.getSelectedItem().toString());
+                        FoodItem.QuantityType.valueOf(quantitySpinner.getSelectedItem().toString()
+                        .toUpperCase());
                 boolean isPinned = pinnedSwitch.isChecked();
                 FoodItem foodItem = new FoodItem(name, isPinned,
                         quantityType, category);

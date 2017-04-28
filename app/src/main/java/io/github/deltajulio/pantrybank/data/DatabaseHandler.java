@@ -58,7 +58,6 @@ public class DatabaseHandler
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .child(foodId)
                 .setValue(item);
     }
 
@@ -101,12 +100,12 @@ public class DatabaseHandler
                 .child(QUANTITY_APPROX).setValue(quantityApprox);
     }
 
-    public void UpdateIsPinned(String foodName, boolean isPinned)
+    public void UpdateIsPinned(String foodId, boolean isPinned)
     {
         databaseReference.child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .child(foodName)
+                .child(foodId)
                 .child(IS_PINNED).setValue(isPinned);
     }
 

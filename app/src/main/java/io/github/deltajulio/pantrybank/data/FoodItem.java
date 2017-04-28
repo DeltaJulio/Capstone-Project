@@ -1,7 +1,5 @@
 package io.github.deltajulio.pantrybank.data;
 
-import android.util.Log;
-
 /**
  * TODO: add a class header comment
  */
@@ -23,38 +21,38 @@ public class FoodItem
     private boolean isPinned;
     private String quantityType;
     private String quantity;
-    private String category;
+    private String categoryId;
     private String foodId;
 
     @SuppressWarnings("unused")
     public FoodItem() { /*Needed for Firebase ui*/ }
 
     private FoodItem(String name, boolean isPinned, QuantityType quantityType, String quantity,
-                     String category)
+                     String categoryId)
     {
         setName(name);
         setIsPinned(isPinned);
         setQuantityType(quantityType);
         setQuantity(quantity);
-        setCategory(category);
+        setCategoryId(categoryId);
     }
 
-    public FoodItem(String name, boolean isPinned, long quantityNum, String category)
+    public FoodItem(String name, boolean isPinned, long quantityNum, String categoryId)
     {
-        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum), category);
+        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum), categoryId);
     }
 
-    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox, String category)
+    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox, String categoryId)
     {
-        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString(), category);
+        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString(), categoryId);
     }
 
-    public FoodItem(String name, boolean isPinned, QuantityType quantityType, String category)
+    public FoodItem(String name, boolean isPinned, QuantityType quantityType, String categoryId)
     {
         this(name, isPinned, quantityType,
                 (quantityType == QuantityType.NUMERICAL ?
                 String.valueOf(1): QuantityApprox.NORMAL.toString()),
-                category);
+                categoryId);
     }
 
     public final String getName() { return name; }
@@ -82,8 +80,8 @@ public class FoodItem
     public final QuantityApprox GetQuantityEnum() { return QuantityApprox.valueOf(quantity); }
     public void SetQuantityEnum(QuantityApprox quantity) { this.quantity = quantity.toString(); }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public String getCategoryId() { return categoryId; }
+    public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
 
     public String getFoodId() { return foodId; }
     public void setFoodId(String foodId) { this.foodId = foodId; }

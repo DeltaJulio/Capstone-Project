@@ -38,9 +38,7 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     {
         viewHolder.SetItemName(item.getName());
         viewHolder.SetIsPinned(item.getIsPinned());
-
-        Log.d(TAG, item.getName());
-        Log.d(TAG, item.getQuantityType().toString());
+        
         if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
         {
             viewHolder.SetItemQuantity(String.valueOf(item.GetQuantityLong()));
@@ -54,7 +52,7 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     public void OnPinClicked(final int position)
     {
         FoodItem item = getItem(position);
-        databaseHandler.UpdateIsPinned(item.getName(), !item.getIsPinned());
+        databaseHandler.UpdateIsPinned(item.getFoodId(), !item.getIsPinned());
     }
 
     @Override
