@@ -1,9 +1,11 @@
 package io.github.deltajulio.pantrybank;
 
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
+import io.github.deltajulio.pantrybank.data.FoodItem;
 
 public class NewItemActivity extends AppCompatActivity
 {
@@ -27,6 +30,14 @@ public class NewItemActivity extends AppCompatActivity
      * Firebase Objects
      */
     private DatabaseHandler databaseHandler;
+
+    /**
+     * View Objects
+     */
+    TextInputEditText nameText;
+    AppCompatSpinner quantitySpinner;
+    AppCompatSpinner categorySpinner;
+    SwitchCompat pinnedSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,11 +68,16 @@ public class NewItemActivity extends AppCompatActivity
         PopulateCategorySpinner();
 
         // Pass quantity types to spinner
-        AppCompatSpinner quantitySpinner = (AppCompatSpinner) findViewById(R.id.quantity_type_spinner);
+        quantitySpinner = (AppCompatSpinner) findViewById(R.id.quantity_type_spinner);
         ArrayAdapter<CharSequence> quantityAdapter = ArrayAdapter.createFromResource(this,
                 R.array.quantity_types, android.R.layout.simple_spinner_item);
         quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quantitySpinner.setAdapter(quantityAdapter);
+
+        // Grab reference to rest of view objects
+        nameText = (TextInputEditText) findViewById(R.id.item_name);
+        categorySpinner = (AppCompatSpinner) findViewById(R.id.category_spinner);
+        pinnedSwitch = (SwitchCompat) findViewById(R.id.pinned_switch);
     }
 
     private void PopulateCategorySpinner()
@@ -112,7 +128,15 @@ public class NewItemActivity extends AppCompatActivity
         {
             case R.id.action_done:
             {
-                // TODO: add food item to databaseHandler
+                String name = nameText.getText().toString();
+                String category = categorySpinner.getSelectedItem().toString();
+                FoodItem.QuantityType quantityType =
+                        FoodItem.QuantityType.valueOf(quantitySpinner.getSelectedItem().toString());
+                boolean isPinned = pinnedSwitch.isChecked();
+                FoodItem foodItem = new FoodItem(name, isPinned,
+                        quantityType, category);
+
+                databaseHandler.AddItem(foodItem);
             }
             default:
             {

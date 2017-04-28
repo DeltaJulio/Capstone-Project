@@ -49,6 +49,14 @@ public class FoodItem
         this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString(), category);
     }
 
+    public FoodItem(String name, boolean isPinned, QuantityType quantityType, String category)
+    {
+        this(name, isPinned, quantityType,
+                (quantityType == QuantityType.NUMERICAL ?
+                String.valueOf(1): QuantityApprox.NORMAL.toString()),
+                category);
+    }
+
     public final String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
