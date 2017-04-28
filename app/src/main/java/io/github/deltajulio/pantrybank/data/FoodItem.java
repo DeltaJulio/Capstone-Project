@@ -24,6 +24,7 @@ public class FoodItem
     private String quantityType;
     private long quantityNum;
     private String quantityApprox;
+    private String foodId;
 
     @SuppressWarnings("unused")
     public FoodItem() { /*Needed for Firebase ui*/ }
@@ -56,4 +57,8 @@ public class FoodItem
     public QuantityApprox getQuantityApprox() { return QuantityApprox.valueOf(quantityApprox); }
 
     public void setQuantityApprox(QuantityApprox quantityApprox) { this.quantityApprox = quantityApprox.toString(); }
+
+    public String getFoodId() { return foodId; }
+
+    public void setFoodId(String foodId) { this.foodId = foodId; }
 }

@@ -44,13 +44,21 @@ public class DatabaseHandler
 
     public void AddItem(FoodItem foodItem)
     {
+        String foodId = databaseReference
+                .child(USER_PATH)
+                .child(userId)
+                .child(ITEMS)
+                .push().getKey();
+
         Map<String, FoodItem> item = new HashMap<String, FoodItem>();
-        item.put(foodItem.getName(), foodItem);
+        foodItem.setFoodId(foodId);
+        item.put(foodId, foodItem);
 
         databaseReference
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
+                .child(foodId)
                 .setValue(item);
     }
 
