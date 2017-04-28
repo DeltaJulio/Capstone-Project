@@ -14,7 +14,34 @@ public class FoodItem
     }
     public enum QuantityApprox
     {
-        NULL, NONE_REMAINING, RUNNING_LOW, NORMAL, PLENTY
+        NULL,
+        NONE_REMAINING
+                {
+                    @Override
+                    public QuantityApprox Previous()
+                    {
+                        return this;
+                    }
+                },
+        RUNNING_LOW, NORMAL,
+        PLENTY
+                {
+                    @Override
+                    public QuantityApprox Next()
+                    {
+                        return this;
+                    }
+                };
+
+        public QuantityApprox Next()
+        {
+            return values()[ordinal() + 1];
+        }
+
+        public QuantityApprox Previous()
+        {
+            return values()[ordinal() - 1];
+        }
     }
 
     private String name;
