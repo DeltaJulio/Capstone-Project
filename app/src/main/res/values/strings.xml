@@ -35,6 +35,12 @@
     <string name="action_done">Done</string>
     <string name="label_name">Item name</string>
     <string name="label_category">Category</string>
-    <string name="label_quantity_type">Quantity type</string>
+    <string name="label_quantity_type">Quantity type ?</string>
     <string name="label_pinned">Pinned ?</string>
+
+    <!-- Quantity types -->
+    <string-array name="quantity_types">
+        <item>Numerical</item>
+        <item>Approximate</item>
+    </string-array>
 </resources>
