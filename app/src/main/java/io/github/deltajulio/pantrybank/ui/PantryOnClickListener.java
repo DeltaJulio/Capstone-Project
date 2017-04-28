@@ -11,4 +11,8 @@ public interface PantryOnClickListener
     void OnDropDownClicked(final int position, PantryFoodHolder holder);
 
     void OnEditClicked(final int position);
+
+    void OnAddClicked(final int position);
+
+    void OnRemoveClicked(final int position);
 }

@@ -22,8 +22,7 @@ public class DatabaseHandler
     // db name constants
     public static final String USER_PATH = "users";
     public static final String QUANTITY_TYPE = "quantityType";
-    public static final String QUANTITY_NUM = "quantityNum";
-    public static final String QUANTITY_APPROX = "quantityApprox";
+    public static final String QUANTITY = "quantity";
     public static final String IS_PINNED = "isPinned";
     public static final String ITEMS = "items";
     public static final String CATEGORIES = "categories";
@@ -59,48 +58,49 @@ public class DatabaseHandler
                 .child(foodId).setValue(foodItem);
     }
 
-    public void DeleteItem(String foodName)
+    public void DeleteItem(String foodId)
     {
         databaseReference
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .child(foodName).removeValue();
+                .child(foodId).removeValue();
     }
 
-    public void UpdateQuantityType(String foodName, FoodItem.QuantityType quantityType)
+    public void UpdateQuantityType(String foodId, FoodItem.QuantityType quantityType)
     {
         databaseReference
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .child(foodName)
+                .child(foodId)
                 .child(QUANTITY_TYPE).setValue(quantityType);
     }
 
-    public void UpdateQuantityNum(String foodName, long quantityNum)
+    private void UpdateQuantity(String foodId, String quantity)
     {
         databaseReference
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .child(foodName)
-                .child(QUANTITY_NUM).setValue(quantityNum);
+                .child(foodId)
+                .child(QUANTITY).setValue(quantity);
     }
 
-    public void UpdateQuantityApprox(String foodName, FoodItem.QuantityApprox quantityApprox)
+    public void UpdateQuantityLong(String foodId, long quantity)
     {
-        databaseReference
-                .child(USER_PATH)
-                .child(userId)
-                .child(ITEMS)
-                .child(foodName)
-                .child(QUANTITY_APPROX).setValue(quantityApprox);
+        UpdateQuantity(foodId, String.valueOf(quantity));
+    }
+
+    public void UpdateQuantityEnum(String foodId, FoodItem.QuantityApprox quantity)
+    {
+        UpdateQuantity(foodId, quantity.toString());
     }
 
     public void UpdateIsPinned(String foodId, boolean isPinned)
     {
-        databaseReference.child(USER_PATH)
+        databaseReference
+                .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
                 .child(foodId)

@@ -67,4 +67,31 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     {
 
     }
+
+    @Override
+    public void OnAddClicked(final int position)
+    {
+        FoodItem item = getItem(position);
+        if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
+        {
+            databaseHandler.UpdateQuantityLong(item.getFoodId(), item.GetQuantityLong() + 1);
+        } else
+        {
+            databaseHandler.UpdateQuantityEnum(item.getFoodId(), item.GetQuantityEnum().Next());
+        }
+    }
+
+    @Override
+    public void OnRemoveClicked(final int position)
+    {
+        FoodItem item = getItem(position);
+        if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
+        {
+            long quantity = item.GetQuantityLong() - 1;
+            databaseHandler.UpdateQuantityLong(item.getFoodId(), (quantity >= 0 ? quantity : 0));
+        } else
+        {
+            databaseHandler.UpdateQuantityEnum(item.getFoodId(), item.GetQuantityEnum().Previous());
+        }
+    }
 }

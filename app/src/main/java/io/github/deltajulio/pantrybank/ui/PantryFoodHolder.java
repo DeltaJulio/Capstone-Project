@@ -23,6 +23,8 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
     private TextView itemQuantity;
     private CheckBox itemPin;
     private ToggleButton dropDown;
+    private ImageButton buttonAdd;
+    private ImageButton buttonRemove;
     private ImageButton buttonEdit;
     private LinearLayout actionList;
 
@@ -36,11 +38,15 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
         itemQuantity = (TextView) itemView.findViewById(R.id.item_quantity);
         itemPin = (CheckBox) itemView.findViewById(R.id.item_pin);
         dropDown = (ToggleButton) itemView.findViewById(R.id.button_drop_down);
+        buttonAdd = (ImageButton) itemView.findViewById(R.id.button_add);
+        buttonRemove = (ImageButton) itemView.findViewById(R.id.button_remove);
         buttonEdit = (ImageButton) itemView.findViewById(R.id.button_edit);
         actionList = (LinearLayout) itemView.findViewById(R.id.action_list);
 
         itemPin.setOnClickListener(this);
         dropDown.setOnClickListener(this);
+        buttonAdd.setOnClickListener(this);
+        buttonRemove.setOnClickListener(this);
         buttonEdit.setOnClickListener(this);
     }
 
@@ -58,11 +64,6 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
     }
 
     public final ToggleButton GetDropDown() { return dropDown; }
-
-    public void SetDropDownChecked(boolean isChecked)
-    {
-        dropDown.setChecked(isChecked);
-    }
 
     public void SetActionListVisibility(int visibility)
     {
@@ -84,6 +85,12 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
         } else if (v.getId() == buttonEdit.getId())
         {
             onClickListener.OnEditClicked(getAdapterPosition());
+        } else if (v.getId() == buttonAdd.getId())
+        {
+            onClickListener.OnAddClicked(getAdapterPosition());
+        } else if (v.getId() == buttonRemove.getId())
+        {
+            onClickListener.OnRemoveClicked(getAdapterPosition());
         }
     }
 }
