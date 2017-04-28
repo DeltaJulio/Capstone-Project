@@ -139,6 +139,8 @@ public class NewItemActivity extends AppCompatActivity
                         quantityType, category);
 
                 databaseHandler.AddItem(foodItem);
+                finish();
+                return true;
             }
             default:
             {
