@@ -23,39 +23,39 @@ public class FoodItem
     private boolean isPinned;
     private String quantityType;
     private String quantity;
+    private String category;
     private String foodId;
 
     @SuppressWarnings("unused")
     public FoodItem() { /*Needed for Firebase ui*/ }
 
-    private FoodItem(String name, boolean isPinned, QuantityType quantityType, String quantity)
+    private FoodItem(String name, boolean isPinned, QuantityType quantityType, String quantity,
+                     String category)
     {
         setName(name);
         setIsPinned(isPinned);
         setQuantityType(quantityType);
         setQuantity(quantity);
+        setCategory(category);
     }
 
-    public FoodItem(String name, boolean isPinned, long quantityNum)
+    public FoodItem(String name, boolean isPinned, long quantityNum, String category)
     {
-        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum));
+        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum), category);
     }
 
-    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox)
+    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox, String category)
     {
-        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString());
+        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString(), category);
     }
 
     public final String getName() { return name; }
-
     public void setName(String name) { this.name = name; }
 
     public final boolean getIsPinned() { return isPinned; }
-
     public void setIsPinned(boolean isPinned) { this.isPinned = isPinned; }
 
     public final QuantityType getQuantityType() { return QuantityType.valueOf(quantityType); }
-
     public void setQuantityType(QuantityType quantityType) { this.quantityType = quantityType.toString(); }
 
     /**
@@ -74,7 +74,9 @@ public class FoodItem
     public final QuantityApprox GetQuantityEnum() { return QuantityApprox.valueOf(quantity); }
     public void SetQuantityEnum(QuantityApprox quantity) { this.quantity = quantity.toString(); }
 
-    public String getFoodId() { return foodId; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
+    public String getFoodId() { return foodId; }
     public void setFoodId(String foodId) { this.foodId = foodId; }
 }
