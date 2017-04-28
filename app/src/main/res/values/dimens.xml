@@ -9,4 +9,12 @@
     <!-- List View -->
     <dimen name="list_horizontal_margin">16dp</dimen>
     <dimen name="list_text_size">13sp</dimen>
+
+    <!-- NewItem -->
+    <dimen name="new_text_vertical_margin">8dp</dimen>
+
+    <!-- InputLabel -->
+    <dimen name="input_label_vertical_padding">8dp</dimen>
+    <dimen name="input_label_horizontal_padding">4dp</dimen>
+
 </resources>

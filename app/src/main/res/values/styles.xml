@@ -24,4 +24,27 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <!-- NewItem TextInputLayout -->
+    <style name="NewItemLabel" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/new_text_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/new_text_vertical_margin</item>
+    </style>
+
+    <!-- NewItem EditText -->
+    <style name="NewItemText" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <!-- InputLabel -->
+    <style name="InputLabel" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:paddingBottom">@dimen/input_label_vertical_padding</item>
+        <item name="android:paddingLeft">@dimen/input_label_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/input_label_horizontal_padding</item>
+    </style>
+
 </resources>
