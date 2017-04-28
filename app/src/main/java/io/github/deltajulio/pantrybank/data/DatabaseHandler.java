@@ -49,16 +49,14 @@ public class DatabaseHandler
                 .child(userId)
                 .child(ITEMS)
                 .push().getKey();
-
-        Map<String, FoodItem> item = new HashMap<String, FoodItem>();
+        
         foodItem.setFoodId(foodId);
-        item.put(foodId, foodItem);
 
         databaseReference
                 .child(USER_PATH)
                 .child(userId)
                 .child(ITEMS)
-                .setValue(item);
+                .child(foodId).setValue(foodItem);
     }
 
     public void DeleteItem(String foodName)
