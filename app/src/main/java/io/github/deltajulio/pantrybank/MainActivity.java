@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
 {
     private static final String TAG = "MainActivity";
     public static final String EXTRA_ACTION = "io.github.deltajulio.pantrybank.ACTION";
+    public static final String FOOD_ITEM = "io.github.deltajulio.pantrybank.FOOD_ITEM";
 
     /**
      * Firebase Objects
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     {
         Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
         intent.putExtra(EXTRA_ACTION, NewItemActivity.EDIT);
+        intent.putExtra(FOOD_ITEM, item);
         startActivity(intent);
     }
 

@@ -1,10 +1,12 @@
 package io.github.deltajulio.pantrybank.data;
 
+import java.io.Serializable;
+
 /**
  * TODO: add a class header comment
  */
 
-public class FoodItem
+public class FoodItem implements Serializable
 {
     private final String TAG = "FoodItem";
 

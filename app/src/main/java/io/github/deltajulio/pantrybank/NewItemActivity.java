@@ -1,5 +1,6 @@
 package io.github.deltajulio.pantrybank;
 
+import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import io.github.deltajulio.pantrybank.data.Category;
@@ -79,12 +81,6 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // Change activity title based on bundle extras
-        if (intentAction.equals(EDIT))
-        {
-            actionBar.setTitle(R.string.title_activity_edit_item);
-        }
-
         // Pass categories to spinner
         PopulateCategorySpinner();
 
@@ -110,6 +106,15 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         quantityLongText = (TextInputEditText) findViewById(R.id.item_quantity);
         quantityEnumContainer = (LinearLayout) findViewById(R.id.quantity_enum_container);
         quantityLongContainer = (TextInputLayout) findViewById(R.id.quantity_long_container);
+
+        if (intentAction.equals(EDIT))
+        {
+            // Change activity title based on bundle extras
+            actionBar.setTitle(R.string.title_activity_edit_item);
+
+            // fill input fields with info from database
+            PopulateInputFields();
+        }
     }
 
     private void PopulateCategorySpinner()
@@ -144,6 +149,61 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
                         Log.d(TAG, "onCreate:onCancelled", databaseError.toException());
                     }
                 });
+    }
+
+    /**
+     * When this activity is launched in edit mode, this populates the input fields to match the
+     * already supplied data from the db.
+     */
+    private void PopulateInputFields()
+    {
+        if (!intentAction.equals(EDIT))
+        {
+            Log.w(TAG, "PopulateInputFields: was called in NEW mode. Aborting!");
+            return;
+        }
+
+        FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+
+        nameText.setText(foodItem.getName());
+
+        databaseHandler.GetDatabaseReference()
+                .child(DatabaseHandler.USER_PATH)
+                .child(databaseHandler.GetUserId())
+                .child(DatabaseHandler.CATEGORIES)
+                .child(foodItem.getCategoryId()).addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                final DataSnapshot finalDatasnapShot = dataSnapshot;
+
+                // We need to delay looking at the categorySpinner to allow time for the adapter to
+                // populate the view.
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        for (int i = 0; i < categorySpinner.getAdapter().getCount(); i++)
+                        {
+                            if (categorySpinner.getAdapter().getItem(i).toString()
+                                    .equals(finalDatasnapShot.child(Category.NAME).getValue().toString()))
+                            {
+                                categorySpinner.setSelection(i);
+                            }
+                        }
+                    }
+                }, 100);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                Log.w(TAG, "PopulateInputFields:onCancelled", databaseError.toException());
+            }
+        });
     }
 
     @Override
