@@ -165,8 +165,24 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
 
         FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
 
+        // Populate name field
         nameText.setText(foodItem.getName());
+        // Populate quantity type field
+        FoodItem.QuantityType quantityType = foodItem.getQuantityType();
+        for (int i = 0; i < quantitySpinner.getAdapter().getCount(); i++)
+        {
+            if (quantityType.toString().equalsIgnoreCase(quantitySpinner.getAdapter().getItem(i).toString()))
+            {
+                quantitySpinner.setSelection(i);
+            }
+        }
 
+        /**
+         * Select the desired category in categorySpinner. Since FoodItem stores the ID of the
+         * category, we need to grab the name from the db. Then we wait for
+         * {@link #PopulateCategorySpinner()} to populate the view to find the matching
+         * category in the spinner.
+         */
         databaseHandler.GetDatabaseReference()
                 .child(DatabaseHandler.USER_PATH)
                 .child(databaseHandler.GetUserId())
