@@ -26,7 +26,8 @@ import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
 {
     private static final String TAG = "MainActivity";
-    private static final String EXTRA_TAB = "io.github.deltajulio.pantrybank.CURRENT_TAB";
+    public static final String EXTRA_TAB = "io.github.deltajulio.pantrybank.CURRENT_TAB";
+    public static final String EXTRA_ACTION = "io.github.deltajulio.pantrybank.ACTION";
 
     /**
      * Firebase Objects
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                     Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
                     intent.putExtra(EXTRA_TAB,
                             tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
+                    intent.putExtra(EXTRA_ACTION, NewItemActivity.NEW);
                     startActivity(intent);
                 }
             }
