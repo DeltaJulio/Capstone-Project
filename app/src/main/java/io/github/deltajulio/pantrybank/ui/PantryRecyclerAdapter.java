@@ -1,5 +1,6 @@
 package io.github.deltajulio.pantrybank.ui;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ToggleButton;
@@ -7,6 +8,8 @@ import android.widget.ToggleButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
+import io.github.deltajulio.pantrybank.MainActivity;
+import io.github.deltajulio.pantrybank.NewItemActivity;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
 
@@ -17,12 +20,14 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
 {
     private static final String TAG = "PantryRecycleAdapter";
     private final DatabaseHandler databaseHandler;
+    private final MainFragmentListener mainListener;
 
     public PantryRecyclerAdapter(Class<FoodItem> modelClass, int modelLayout,
                                  Class<PantryFoodHolder> viewHolderClass, Query ref,
                                  MainFragmentListener onClickListener)
     {
         super(modelClass, modelLayout, viewHolderClass, ref);
+        this.mainListener = onClickListener;
         databaseHandler = onClickListener.GetDatabase();
     }
 
@@ -65,7 +70,8 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
     @Override
     public void OnEditClicked(final int position)
     {
-
+        // Launch new item activity in edit mode
+        mainListener.LaunchEditItemActivity(getItem(position));
     }
 
     @Override

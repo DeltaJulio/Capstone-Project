@@ -21,12 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 import io.github.deltajulio.pantrybank.auth.LoginActivity;
 import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
+import io.github.deltajulio.pantrybank.data.FoodItem;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
 {
     private static final String TAG = "MainActivity";
-    public static final String EXTRA_TAB = "io.github.deltajulio.pantrybank.CURRENT_TAB";
     public static final String EXTRA_ACTION = "io.github.deltajulio.pantrybank.ACTION";
 
     /**
@@ -109,8 +109,6 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                 {
                     // Launch new item activity
                     Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
-                    intent.putExtra(EXTRA_TAB,
-                            tabLayout.getTabAt(tabLayout.getSelectedTabPosition()).getText());
                     intent.putExtra(EXTRA_ACTION, NewItemActivity.NEW);
                     startActivity(intent);
                 }
@@ -145,6 +143,14 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     public DatabaseHandler GetDatabase()
     {
         return databaseHandler;
+    }
+
+    @Override
+    public void LaunchEditItemActivity(FoodItem item)
+    {
+        Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
+        intent.putExtra(EXTRA_ACTION, NewItemActivity.EDIT);
+        startActivity(intent);
     }
 
     private void AddDefaultCategory()

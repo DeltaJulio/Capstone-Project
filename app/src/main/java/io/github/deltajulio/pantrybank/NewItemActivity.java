@@ -33,8 +33,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
     public static final String NEW = "new";
     public static final String EDIT = "edit";
 
-    private String currentTab;
-    private String action;
+    private String intentAction;
 
     /**
      * Firebase Objects
@@ -59,8 +58,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
-        currentTab = getIntent().getStringExtra(MainActivity.EXTRA_TAB);
-        action = getIntent().getStringExtra(MainActivity.EXTRA_ACTION);
+        intentAction = getIntent().getStringExtra(MainActivity.EXTRA_ACTION);
 
         // Instantiate databaseHandler handler
         try
@@ -80,6 +78,12 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         // Enable up navigation button on app bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        // Change activity title based on bundle extras
+        if (intentAction.equals(EDIT))
+        {
+            actionBar.setTitle(R.string.title_activity_edit_item);
+        }
 
         // Pass categories to spinner
         PopulateCategorySpinner();
