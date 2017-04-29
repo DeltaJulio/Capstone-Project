@@ -196,6 +196,9 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
             }
         }
 
+        // Populate pinned switch
+        pinnedSwitch.setChecked(foodItem.getIsPinned());
+
         /**
          * Select the desired category in categorySpinner. Since FoodItem stores the ID of the
          * category, we need to grab the name from the db. Then we wait for
