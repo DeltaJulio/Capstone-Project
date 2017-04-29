@@ -197,9 +197,5 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                 Log.d(TAG, "AddDefaultCategory:onCancelled", databaseError.toException());
             }
         });
-
-        String categoryId = ref.child(DatabaseHandler.USER_PATH)
-                .child(auth.getCurrentUser().getUid())
-                .child(DatabaseHandler.CATEGORIES).push().getKey();
     }
 }
