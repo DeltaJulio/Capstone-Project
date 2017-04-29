@@ -177,6 +177,25 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
             }
         }
 
+        if (quantityType == FoodItem.QuantityType.NUMERICAL)
+        {
+            // Populate quantity long field
+            long quantityLong = foodItem.GetQuantityLong();
+            quantityLongText.setText(String.valueOf(quantityLong));
+        } else
+        {
+            // Populate quantity enum field
+            String quantityApprox = foodItem.GetQuantityEnum().toString();
+            for (int i = 0; i <quantityEnumSpinner.getAdapter().getCount(); i++)
+            {
+                if (quantityApprox.equalsIgnoreCase
+                    (quantityEnumSpinner.getAdapter().getItem(i).toString()))
+                {
+                    quantityEnumSpinner.setSelection(i);
+                }
+            }
+        }
+
         /**
          * Select the desired category in categorySpinner. Since FoodItem stores the ID of the
          * category, we need to grab the name from the db. Then we wait for
