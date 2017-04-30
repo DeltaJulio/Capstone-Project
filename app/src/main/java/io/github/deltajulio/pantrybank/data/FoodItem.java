@@ -10,6 +10,14 @@ public class FoodItem implements Serializable
 {
     private final String TAG = "FoodItem";
 
+	// db name constants
+	public static final String NAME = "name";
+	public static final String QUANTITY_TYPE = "quantityType";
+	public static final String QUANTITY = "quantity";
+	public static final String FOOD_ID = "foodId";
+	public static final String IS_PINNED = "isPinned";
+	public static final String CATEGORY_ID = "categoryId";
+
     public enum QuantityType
     {
         NULL, NUMERICAL, APPROXIMATE
