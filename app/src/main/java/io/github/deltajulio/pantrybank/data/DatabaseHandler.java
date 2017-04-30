@@ -21,9 +21,6 @@ public class DatabaseHandler
 
     // db name constants
     public static final String USER_PATH = "users";
-    public static final String QUANTITY_TYPE = "quantityType";
-    public static final String QUANTITY = "quantity";
-    public static final String IS_PINNED = "isPinned";
     public static final String ITEMS = "items";
     public static final String CATEGORIES = "categories";
 
@@ -67,6 +64,16 @@ public class DatabaseHandler
                 .child(foodId).removeValue();
     }
 
+	public void UpdateName(String foodId, String name)
+	{
+		databaseReference
+				.child(USER_PATH)
+				.child(userId)
+				.child(ITEMS)
+				.child(foodId)
+				.child(FoodItem.NAME).setValue(name);
+	}
+
     public void UpdateQuantityType(String foodId, FoodItem.QuantityType quantityType)
     {
         databaseReference
@@ -74,7 +81,7 @@ public class DatabaseHandler
                 .child(userId)
                 .child(ITEMS)
                 .child(foodId)
-                .child(QUANTITY_TYPE).setValue(quantityType);
+                .child(FoodItem.QUANTITY_TYPE).setValue(quantityType);
     }
 
     private void UpdateQuantity(String foodId, String quantity)
@@ -84,7 +91,7 @@ public class DatabaseHandler
                 .child(userId)
                 .child(ITEMS)
                 .child(foodId)
-                .child(QUANTITY).setValue(quantity);
+                .child(FoodItem.QUANTITY).setValue(quantity);
     }
 
     public void UpdateQuantityLong(String foodId, long quantity)
@@ -104,8 +111,18 @@ public class DatabaseHandler
                 .child(userId)
                 .child(ITEMS)
                 .child(foodId)
-                .child(IS_PINNED).setValue(isPinned);
+                .child(FoodItem.IS_PINNED).setValue(isPinned);
     }
+
+	public void UpdateCategory(String foodId, String categoryId)
+	{
+		databaseReference
+				.child(USER_PATH)
+				.child(userId)
+				.child(ITEMS)
+				.child(foodId)
+				.child(FoodItem.CATEGORY_ID).setValue(categoryId);
+	}
 
     public DatabaseReference GetDatabaseReference() { return databaseReference; }
 }
