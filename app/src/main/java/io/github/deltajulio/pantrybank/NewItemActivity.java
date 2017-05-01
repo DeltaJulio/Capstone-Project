@@ -132,6 +132,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
                         ArrayList<String> categories = new ArrayList<>();
+	                        categoriesDirectory = new ArrayList<DataSnapshot>();
 
                         for (DataSnapshot category : dataSnapshot.getChildren())
                         {
@@ -263,10 +264,10 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         {
             case R.id.action_done:
             {
-                if (intentAction == NEW)
+                if (intentAction.equals(NEW))
                 {
                     SaveNewItem();
-                } else if (intentAction == EDIT)
+                } else if (intentAction.equals(EDIT))
                 {
                     UpdateItem();
                 }
@@ -308,67 +309,53 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         // intentionally left blank
     }
 
-    /**
-     * Grabs data from input fields and saves it to database as a new item.
-     */
-    private void SaveNewItem()
-    {
-        databaseHandler.GetDatabaseReference()
-            .child(DatabaseHandler.USER_PATH)
-            .child(databaseHandler.GetUserId())
-            .child(DatabaseHandler.CATEGORIES)
-            .addListenerForSingleValueEvent(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot)
-                {
-                    // Find category id
-                    String category = categorySpinner.getSelectedItem().toString();
-                    for (DataSnapshot child : dataSnapshot.getChildren())
-                    {
-                        if (child.child(Category.NAME).getValue().toString().equals(category))
-                        {
-                            category = child.child(Category.ID).getValue().toString();
-                            break;
-                        }
-                    }
+	/**
+	 * Grabs data from input fields and saves it to database as a new item.
+	 */
+	private void SaveNewItem()
+	{
+		// find name
+		String name = nameText.getText().toString();
 
-                    // Get non localized version of QuantityType
-                    FoodItem.QuantityType quantityType =
-                        FoodItem.QuantityType.values()
-                            [quantitySpinner.getSelectedItemPosition() + 1];
+		// find quantity type
+		// get non localized version of QuantityType
+		FoodItem.QuantityType quantityType
+				= FoodItem.QuantityType.values()[quantitySpinner.getSelectedItemPosition() + 1];
 
-                    String name = nameText.getText().toString();
-                    boolean isPinned = pinnedSwitch.isChecked();
-                    FoodItem foodItem = new FoodItem(name, isPinned,
-                        quantityType, category);
+		// find cateogory id
+		String categoryName = categorySpinner.getSelectedItem().toString();
+		String categoryId = null;
+		for (DataSnapshot child : categoriesDirectory)
+		{
+			if (categoryName.equalsIgnoreCase(child.child(Category.NAME).getValue().toString()))
+			{
+				categoryId = child.child(Category.ID).getValue().toString();
+			}
+		}
 
-                    // Set quantity
-                    if (quantityType == FoodItem.QuantityType.NUMERICAL)
-                    {
-                        Log.d(TAG, "onOptionsItemSelected:onDataChanged: " + quantityLongText.getText().toString());
+		// find quantity
+		long quantityLong = Long.valueOf(quantityLongText.getText().toString());
+		FoodItem.QuantityApprox quantityEnum
+				= FoodItem.QuantityApprox.values()
+				[quantityEnumSpinner.getSelectedItemPosition() + 1];
 
-                        foodItem.SetQuantityLong(
-                            Long.valueOf(quantityLongText.getText().toString()));
-                    } else
-                    {
-                        FoodItem.QuantityApprox quantityApprox =
-                            FoodItem.QuantityApprox.values()
-                                [quantityEnumSpinner.getSelectedItemPosition() + 1];
-                        foodItem.SetQuantityEnum(quantityApprox);
-                    }
+		//find isPinned
+		boolean isPinned = pinnedSwitch.isChecked();
 
-                    databaseHandler.AddItem(foodItem);
-                    finish();
-                }
+		// create food item
+		FoodItem foodItem;
+		if (quantityType.equals(FoodItem.QuantityType.NUMERICAL))
+		{
+			foodItem = new FoodItem(name, isPinned, quantityLong, categoryId);
+		} else
+		{
+			foodItem = new FoodItem(name, isPinned, quantityEnum, categoryId);
+		}
 
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    Log.d(TAG, "onOptionsItemsSelected:onCancelled", databaseError.toException());
-                }
-            });
-    }
+		// send data to db
+		databaseHandler.AddItem(foodItem);
+		finish(); // return to main activity
+	}
 
 	/**
 	 * Similar to {@link #SaveNewItem()}, except this updates the db item instead of making a new
@@ -405,8 +392,9 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
 			}
 		} else
 		{
-			FoodItem.QuantityApprox quantity
-					= FoodItem.QuantityApprox.valueOf(quantityEnumSpinner.getSelectedItem().toString());
+			FoodItem.QuantityApprox quantity = FoodItem.QuantityApprox.values()
+					[quantityEnumSpinner.getSelectedItemPosition() + 1];
+					//= FoodItem.QuantityApprox.valueOf(quantityEnumSpinner.getSelectedItem().toString());
 			if (!quantity.equals(foodItem.GetQuantityEnum()))
 			{
 				databaseHandler.UpdateQuantityEnum(foodItem.getFoodId(), quantity);
@@ -438,6 +426,9 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
 		{
 			databaseHandler.UpdateIsPinned(foodItem.getFoodId(), isPinned);
 		}
+
+		// return to main activity
+		finish();
 	}
 
 }
