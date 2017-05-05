@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +57,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
     TextInputLayout quantityLongContainer;
     TextInputEditText quantityLongText;
     AppCompatSpinner quantityEnumSpinner;
+		Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -109,6 +111,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
         quantityLongText = (TextInputEditText) findViewById(R.id.item_quantity);
         quantityEnumContainer = (LinearLayout) findViewById(R.id.quantity_enum_container);
         quantityLongContainer = (TextInputLayout) findViewById(R.id.quantity_long_container);
+				deleteButton = (Button) findViewById(R.id.button_delete);
 
         if (intentAction.equals(EDIT))
         {
@@ -117,6 +120,23 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
 
             // fill input fields with info from database
             PopulateInputFields();
+
+				// make the delete button visible
+				deleteButton.setVisibility(View.VISIBLE);
+
+				// set up on click listener for delete button
+				deleteButton.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						// TODO: prompt for confirmation
+						
+						FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+						databaseHandler.DeleteItem(foodItem.getFoodId());
+						finish();
+					}
+				});
         }
     }
 
