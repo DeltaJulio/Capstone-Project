@@ -2,9 +2,12 @@ package io.github.deltajulio.pantrybank;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +15,12 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
+import io.github.deltajulio.pantrybank.ui.CategorizedRecyclerAdapter;
 import io.github.deltajulio.pantrybank.ui.PantryFoodHolder;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 import io.github.deltajulio.pantrybank.ui.PantryRecyclerAdapter;
@@ -26,9 +33,13 @@ import io.github.deltajulio.pantrybank.ui.PantryRecyclerAdapter;
  */
 public class PantryFragment extends Fragment
 {
+    private static final String TAG = "PantryFragment";
+
     DatabaseReference reference;
     PantryRecyclerAdapter recyclerAdapter;
     private MainFragmentListener listener;
+
+    RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,16 +71,48 @@ public class PantryFragment extends Fragment
         DatabaseHandler databaseHandlerHandler = listener.GetDatabase();
 
         // Set the adapter
-        RecyclerView recyclerView = (RecyclerView) view;
+        recyclerView = (RecyclerView) view;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerAdapter = new PantryRecyclerAdapter(FoodItem.class, R.layout.pantry_item,
                 PantryFoodHolder.class,
                 reference.child(DatabaseHandler.USER_PATH)
                         .child(databaseHandlerHandler.GetUserId())
                         .child(DatabaseHandler.ITEMS)
                 , listener);
-        recyclerView.setAdapter(recyclerAdapter);
+
+        // Categories adapter
+        List<CategorizedRecyclerAdapter.Category> categories
+            = new ArrayList<CategorizedRecyclerAdapter.Category>();
+
+        // Categories
+        categories.add(new CategorizedRecyclerAdapter.Category(0, "Category 1"));
+        //categories.add(new CategorizedRecyclerAdapter.Category(4, "Category 2"));
+
+        // Give pantry item adapter time to sync items
+        // TODO: create runnable
+        final List<CategorizedRecyclerAdapter.Category> finalCat = categories;
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                int count = recyclerAdapter.getItemCount();
+
+                // Add pantry item adapter to category adapter
+                CategorizedRecyclerAdapter.Category[] dummy
+                    = new CategorizedRecyclerAdapter.Category[finalCat.size()];
+                CategorizedRecyclerAdapter categorizedAdapter = new
+                    CategorizedRecyclerAdapter(getContext(), R.layout.category
+                    , R.id.category_text, recyclerAdapter);
+                categorizedAdapter.SetCategories(finalCat.toArray(dummy));
+
+                recyclerView.setAdapter(categorizedAdapter);
+            }
+        }, 2000);
 
         return view;
     }

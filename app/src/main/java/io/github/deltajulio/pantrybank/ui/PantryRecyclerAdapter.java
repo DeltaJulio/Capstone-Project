@@ -3,6 +3,7 @@ package io.github.deltajulio.pantrybank.ui;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ToggleButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,6 +31,12 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
         this.mainListener = onClickListener;
         databaseHandler = onClickListener.GetDatabase();
     }
+
+	@Override
+	public PantryFoodHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		return new PantryFoodHolder(parent);
+	}
 
     @Override
     public void onBindViewHolder(PantryFoodHolder viewHolder, int position)
@@ -100,4 +107,11 @@ public class PantryRecyclerAdapter extends FirebaseRecyclerAdapter<FoodItem, Pan
             databaseHandler.UpdateQuantityEnum(item.getFoodId(), item.GetQuantityEnum().Previous());
         }
     }
+
+	@Override
+	public int getItemCount()
+	{
+		Log.d(TAG, "getItemCount: " + String.valueOf(super.getItemCount()));
+		return super.getItemCount();
+	}
 }
