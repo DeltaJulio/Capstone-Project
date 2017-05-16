@@ -86,33 +86,19 @@ public class PantryFragment extends Fragment
         List<CategorizedRecyclerAdapter.Category> categories
             = new ArrayList<CategorizedRecyclerAdapter.Category>();
 
-        // Categories
+        // test Categories
         categories.add(new CategorizedRecyclerAdapter.Category(0, "Category 1"));
         //categories.add(new CategorizedRecyclerAdapter.Category(4, "Category 2"));
 
-        // Give pantry item adapter time to sync items
-        // TODO: create runnable
-        final List<CategorizedRecyclerAdapter.Category> finalCat = categories;
+        // Add pantry item adapter to category adapter
+        CategorizedRecyclerAdapter.Category[] dummy
+            = new CategorizedRecyclerAdapter.Category[categories.size()];
+        CategorizedRecyclerAdapter categorizedAdapter = new
+            CategorizedRecyclerAdapter(getContext(), R.layout.category
+            , R.id.category_text, recyclerAdapter);
+        categorizedAdapter.SetCategories(categories.toArray(dummy));
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                int count = recyclerAdapter.getItemCount();
-
-                // Add pantry item adapter to category adapter
-                CategorizedRecyclerAdapter.Category[] dummy
-                    = new CategorizedRecyclerAdapter.Category[finalCat.size()];
-                CategorizedRecyclerAdapter categorizedAdapter = new
-                    CategorizedRecyclerAdapter(getContext(), R.layout.category
-                    , R.id.category_text, recyclerAdapter);
-                categorizedAdapter.SetCategories(finalCat.toArray(dummy));
-
-                recyclerView.setAdapter(categorizedAdapter);
-            }
-        }, 2000);
+        recyclerView.setAdapter(categorizedAdapter);
 
         return view;
     }

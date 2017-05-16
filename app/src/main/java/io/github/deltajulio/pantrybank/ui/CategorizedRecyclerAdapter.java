@@ -1,6 +1,7 @@
 package io.github.deltajulio.pantrybank.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
@@ -121,7 +122,9 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 	@Override
 	public int getItemViewType(int position)
 	{
-		return super.getItemViewType(position);
+		return IsCategorizedPosition(position)
+		       ? SECTION_TYPE
+		       : baseAdapter.getItemViewType(CategorizedPositionToPosition(position) + 1);
 	}
 
 	public static class CategoryHolder extends RecyclerView.ViewHolder
