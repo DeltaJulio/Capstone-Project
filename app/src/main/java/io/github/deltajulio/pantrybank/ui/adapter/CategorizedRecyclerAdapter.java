@@ -1,21 +1,12 @@
-package io.github.deltajulio.pantrybank.ui;
+package io.github.deltajulio.pantrybank.ui.adapter;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
-import java.util.Arrays;
-import java.util.Comparator;
-
-import io.github.deltajulio.pantrybank.data.FoodItem;
 
 /**
  * TODO: add a class header comment
@@ -23,7 +14,7 @@ import io.github.deltajulio.pantrybank.data.FoodItem;
 
 public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
-	private static final String TAG = "CategoryAdapter";
+	private static final String TAG = CategorizedRecyclerAdapter.class.getSimpleName();
 	private final Context context;
 	private static final int SECTION_TYPE = 0;
 
@@ -32,6 +23,7 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 	private int textResourceId;
 	private LayoutInflater layoutInflater;
 	private RecyclerView.Adapter baseAdapter;
+
 	private SparseArray<Category> categories = new SparseArray<Category>();
 
 	public CategorizedRecyclerAdapter(Context context, int categoryResourceId, int textResourceId,
@@ -84,9 +76,9 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 	@Override
 	public long getItemId(int position)
 	{
-		return (IsCategorizedPosition(position)
-		       ? Integer.MAX_VALUE - categories.indexOfKey(position)
-		       : baseAdapter.getItemId(CategorizedPositionToPosition(position)));
+		return (AdapterUtils.IsCategorizedPosition(categories, position)
+				? Integer.MAX_VALUE - categories.indexOfKey(position)
+				: baseAdapter.getItemId(AdapterUtils.CategorizedPositionToPosition(categories, position)));
 	}
 
 	@Override
@@ -105,26 +97,27 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position)
 	{
-		if (IsCategorizedPosition(position))
+		if (AdapterUtils.IsCategorizedPosition(categories, position))
 		{
 			((CategoryHolder)viewHolder).title.setText(categories.get(position).GetTitle());
 		} else
 		{
-			baseAdapter.onBindViewHolder(viewHolder, CategorizedPositionToPosition(position));
-
-			// baseAdapter only takes ViewHolders of type PantryFoodHolder,
-			// but this adapter only provides the type CategoryHolder
-			//PantryFoodHolder pantryFoodHolder = new PantryFoodHolder(viewHolder.itemView);
-			//baseAdapter.onBindViewHolder(pantryFoodHolder, CategorizedPositionToPosition(position));
+			baseAdapter.onBindViewHolder(viewHolder,
+					AdapterUtils.CategorizedPositionToPosition(categories, position));
 		}
 	}
 
 	@Override
 	public int getItemViewType(int position)
 	{
-		return IsCategorizedPosition(position)
-		       ? SECTION_TYPE
-		       : baseAdapter.getItemViewType(CategorizedPositionToPosition(position) + 1);
+		if (AdapterUtils.IsCategorizedPosition(categories, position))
+		{
+			return SECTION_TYPE;
+		} else
+		{
+			return baseAdapter.getItemViewType
+					(AdapterUtils.CategorizedPositionToPosition(categories, position) + 1);
+		}
 	}
 
 	public static class CategoryHolder extends RecyclerView.ViewHolder
@@ -136,69 +129,6 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 			super(view);
 			title = (TextView) view.findViewById(textResourceId);
 		}
-	}
-
-	public void SetCategories(Category[] categories)
-	{
-		this.categories.clear();
-
-		Arrays.sort(categories, new Comparator<Category>()
-		{
-			@Override
-			public int compare(Category o1, Category o2)
-			{
-				return (o1.firstPosition == o2.firstPosition)
-				       ? 0
-				       : ((o1.firstPosition < o2.firstPosition) ? -1 : 1);
-			}
-		});
-
-		int offset = 0;
-		for (Category category : categories)
-		{
-			category.categorizedPosition = category.firstPosition + offset;
-			this.categories.append(category.categorizedPosition, category);
-		}
-	}
-
-	public int PositionToCategorizedPosition(int position)
-	{
-		int offset = 0;
-		for (int i = 0; i < categories.size(); i++)
-		{
-			if (categories.valueAt(i).firstPosition > position)
-			{
-				break;
-			}
-			++offset;
-		}
-
-		return position + offset;
-	}
-
-	public int CategorizedPositionToPosition(int categorizedPosition)
-	{
-		if (IsCategorizedPosition(categorizedPosition))
-		{
-			return RecyclerView.NO_POSITION;
-		}
-
-		int offset = 0;
-		for (int i = 0; i < categories.size(); i++)
-		{
-			if (categories.valueAt(i).categorizedPosition > categorizedPosition)
-			{
-				break;
-			}
-			--offset;
-		}
-
-		return categorizedPosition + offset;
-	}
-
-	public boolean IsCategorizedPosition(int position)
-	{
-		return categories.get(position) != null;
 	}
 
 	public static class Category
@@ -216,4 +146,8 @@ public class CategorizedRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 		public CharSequence GetTitle() { return title; }
 	}
 
+	public SparseArray<Category> GetCategories()
+	{
+		return categories;
+	}
 }

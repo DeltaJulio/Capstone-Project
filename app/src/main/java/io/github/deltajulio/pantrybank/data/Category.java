@@ -12,6 +12,9 @@ public class Category
     private String name;
     private String categoryId;
 
+    @SuppressWarnings("unused")
+    public Category() { /*Needed for Firebase ui*/ }
+
     public Category(String name, String categoryId)
     {
         setName(name);
