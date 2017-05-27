@@ -429,7 +429,7 @@ public class NewItemActivity extends AppCompatActivity implements AdapterView.On
 		{
 			if (categoryName.equalsIgnoreCase(child.child(Category.NAME).getValue().toString()))
 			{
-				categoryId = child.child(Category.NAME).getValue().toString();
+				categoryId = child.child(Category.ID).getValue().toString();
 			}
 		}
 		if (categoryId != null && !categoryId.equals(foodItem.getCategoryId()))
