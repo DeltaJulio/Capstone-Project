@@ -2,7 +2,6 @@ package io.github.deltajulio.pantrybank;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,18 +14,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
-import io.github.deltajulio.pantrybank.ui.adapter.CategorizedRecyclerAdapter;
-import io.github.deltajulio.pantrybank.ui.PantryFoodHolder;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 import io.github.deltajulio.pantrybank.ui.adapter.PantryRecyclerAdapter;
-import io.github.deltajulio.pantrybank.ui.database.BaseRecyclerAdapter;
+import io.github.deltajulio.pantrybank.ui.adapter.BaseRecyclerAdapter;
 
 /**
  * A fragment representing a list of Items.
@@ -41,7 +34,6 @@ public class PantryFragment extends Fragment
     DatabaseReference reference;
     RecyclerView recyclerView;
     BaseRecyclerAdapter recyclerAdapter;
-    CategorizedRecyclerAdapter categorizedAdapter;
     private MainFragmentListener listener;
 
     /**
@@ -88,58 +80,8 @@ public class PantryFragment extends Fragment
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        // Set the base adapter (food items)
-        recyclerAdapter = new PantryRecyclerAdapter(categoriesRef, itemsRef, listener);
-
+        recyclerAdapter = new PantryRecyclerAdapter(categoriesRef, itemsRef, listener, getContext());
         recyclerView.setAdapter(recyclerAdapter);
-
-        /*
-        // Set the adapter
-        recyclerView = (RecyclerView) view;
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        recyclerAdapter = new PantryRecyclerAdapter(FoodItem.class, R.layout.pantry_item,
-                PantryFoodHolder.class,
-                queryRef
-                , listener);
-
-        // Categories adapter
-        List<CategorizedRecyclerAdapter.Category> categories
-            = new ArrayList<CategorizedRecyclerAdapter.Category>();
-
-        // test Categories
-        //categories.add(new CategorizedRecyclerAdapter.Category(0, "Category 1"));
-        //categories.add(new CategorizedRecyclerAdapter.Category(3, "Category 2"));
-
-        // Add pantry item adapter to category adapter
-        CategorizedRecyclerAdapter.Category[] dummy
-            = new CategorizedRecyclerAdapter.Category[categories.size()];
-        categorizedAdapter = new
-            CategorizedRecyclerAdapter(getContext(), R.layout.category
-            , R.id.category_text, recyclerAdapter);
-        categorizedAdapter.SetCategories(categories.toArray(dummy));
-
-        recyclerView.setAdapter(categorizedAdapter);
-        */
-/*
-	Handler handler = new Handler();
-	handler.postDelayed(new Runnable()
-	{
-		@Override
-		public void run()
-		{
-			// TODO: add categories
-			List<CategorizedRecyclerAdapter.Category> categories = new ArrayList<>();
-			categories.add(new CategorizedRecyclerAdapter.Category(0, "Category 1"));
-			categories.add(new CategorizedRecyclerAdapter.Category(3, "Category 2"));
-			CategorizedRecyclerAdapter.Category[] dummy
-					= new CategorizedRecyclerAdapter.Category[categories.size()];
-			categorizedAdapter.SetCategories(categories.toArray(dummy));
-
-			categorizedAdapter.notifyDataSetChanged();
-		}
-	}, 2000);*/
 
         return view;
     }
