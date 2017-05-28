@@ -172,16 +172,17 @@ public abstract class BaseRecyclerAdapter
 				{
 					if (itemItr.getFoodId().equals(item.getFoodId()))
 					{
-						// if category has been changed, replace key
-						if (!itemItr.getCategoryId().equals(item.getCategoryId()))
+						// if category/name has been changed, replace key
+						if (!itemItr.getCategoryId().equals(item.getCategoryId()) ||
+								!itemItr.getName().equals(item.getName()))
 						{
 							// Remove item from container
-							Pair<Boolean, String> result = GetCategoryName(item.getCategoryId());
+							Pair<Boolean, String> result = GetCategoryName(itemItr.getCategoryId());
 							if (!result.first)
 							{
 								throw null;
 							}
-							sortedFood.remove(new FoodKey(result.second, item.getName()));
+							sortedFood.remove(new FoodKey(result.second, itemItr.getName()));
 						}
 						break;
 					}
