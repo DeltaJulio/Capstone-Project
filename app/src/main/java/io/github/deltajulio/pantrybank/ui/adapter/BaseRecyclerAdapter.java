@@ -166,8 +166,26 @@ public abstract class BaseRecyclerAdapter
 			{
 				// Create FoodItem from snapshot
 				FoodItem item = dataSnapshot.getValue(FoodItem.class);
-				// Remove item from container
-				sortedFood.remove(new FoodKey("", item.getName()));
+
+				// check if old key needs to be replaced
+				for (FoodItem itemItr : sortedFood.values())
+				{
+					if (itemItr.getFoodId().equals(item.getFoodId()))
+					{
+						// if category has been changed, replace key
+						if (!itemItr.getCategoryId().equals(item.getCategoryId()))
+						{
+							// Remove item from container
+							Pair<Boolean, String> result = GetCategoryName(item.getCategoryId());
+							if (!result.first)
+							{
+								throw null;
+							}
+							sortedFood.remove(new FoodKey(result.second, item.getName()));
+						}
+						break;
+					}
+				}
 
 				if (!ShouldBeDisplayed(item))
 				{
