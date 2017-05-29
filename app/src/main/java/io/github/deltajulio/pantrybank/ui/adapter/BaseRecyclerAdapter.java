@@ -190,7 +190,15 @@ public abstract class BaseRecyclerAdapter
 
 				if (!ShouldBeDisplayed(item))
 				{
-					// Do not add updated item
+					// Remove updated item
+					Pair<Boolean, String> result = GetCategoryName(item.getCategoryId());
+					if (!result.first)
+					{
+						throw null;
+					}
+
+					sortedFood.remove(new FoodKey(result.second, item.getName()));
+					UpdateCategoryVisibility(item.getCategoryId());
 					notifyDataSetChanged();
 					return;
 				}
