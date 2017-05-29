@@ -70,31 +70,6 @@
 
             </LinearLayout>
 
-            <!-- QuantityType input -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/input_label_vertical_padding"
-                android:layout_marginBottom="@dimen/input_label_vertical_padding"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_quantity_type"
-                    style="@style/InputLabel"
-                    />
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/quantity_type_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    />
-
-            </LinearLayout>
-
             <!-- Quantity long input -->
             <android.support.design.widget.TextInputLayout
                 style="@style/NewItemLabel"
@@ -110,28 +85,25 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <!-- Quantity enum input -->
             <LinearLayout
-                android:id="@+id/quantity_enum_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/input_label_vertical_padding"
-                android:layout_marginBottom="@dimen/input_label_vertical_padding"
                 >
 
-                <TextView
+                <ImageButton
+                    android:id="@+id/button_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_quantity"
-                    style="@style/InputLabel"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_add_black_24dp"
                     />
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/quantity_enum_spinner"
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/button_remove"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_remove_black_24dp"
                     />
 
             </LinearLayout>

@@ -56,23 +56,16 @@
 
         </LinearLayout>
 
-        <ToggleButton
-            android:id="@+id/button_drop_down"
+        <ImageButton
+            android:id="@+id/button_edit"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:button="@drawable/drop_down"
             android:background="@null"
-            android:textOff=" "
-            android:textOn=" "
-            tools:ignore="HardcodedText"
+            app:srcCompat="@drawable/ic_edit_black_24dp"
             />
 
     </RelativeLayout>
-
-    <include
-        layout="@layout/action_list"
-        />
 
 </LinearLayout>
