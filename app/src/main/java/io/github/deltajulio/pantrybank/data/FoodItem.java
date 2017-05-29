@@ -8,118 +8,56 @@ import java.io.Serializable;
 
 public class FoodItem implements Serializable
 {
-    private final String TAG = "FoodItem";
+	private static final String TAG = FoodItem.class.getSimpleName();
 
 	// db name constants
 	public static final String NAME = "name";
-	public static final String QUANTITY_TYPE = "quantityType";
 	public static final String QUANTITY = "quantity";
 	public static final String FOOD_ID = "foodId";
 	public static final String IS_PINNED = "isPinned";
 	public static final String CATEGORY_ID = "categoryId";
 
-    public enum QuantityType
-    {
-        NULL, NUMERICAL, APPROXIMATE
-    }
-    public enum QuantityApprox
-    {
-        NULL,
-        NONE_REMAINING
-                {
-                    @Override
-                    public QuantityApprox Previous()
-                    {
-                        return this;
-                    }
-                },
-        RUNNING_LOW, NORMAL,
-        PLENTY
-                {
-                    @Override
-                    public QuantityApprox Next()
-                    {
-                        return this;
-                    }
-                };
+	private String name;
+	private boolean isPinned;
+	private String quantityType;
+	private String quantity;
+	private String categoryId;
+	private String foodId;
 
-        public QuantityApprox Next()
-        {
-            return values()[ordinal() + 1];
-        }
+	@SuppressWarnings("unused")
+	public FoodItem() { /*Needed for Firebase*/ }
 
-        public QuantityApprox Previous()
-        {
-            return values()[ordinal() - 1];
-        }
-    }
+	public FoodItem(String name, boolean isPinned, long quantity,
+			String categoryId)
+	{
+		setName(name);
+		setIsPinned(isPinned);
+		setQuantity(String.valueOf(quantity));
+		setCategoryId(categoryId);
+	}
 
-    private String name;
-    private boolean isPinned;
-    private String quantityType;
-    private String quantity;
-    private String categoryId;
-    private String foodId;
+	public final String getName() { return name; }
+	public void setName(String name) { this.name = name; }
 
-    @SuppressWarnings("unused")
-    public FoodItem() { /*Needed for Firebase ui*/ }
+	public final boolean getIsPinned() { return isPinned; }
+	public void setIsPinned(boolean isPinned) { this.isPinned = isPinned; }
 
-    private FoodItem(String name, boolean isPinned, QuantityType quantityType, String quantity,
-                     String categoryId)
-    {
-        setName(name);
-        setIsPinned(isPinned);
-        setQuantityType(quantityType);
-        setQuantity(quantity);
-        setCategoryId(categoryId);
-    }
+	/**
+	 * For retrieving database value. Use long return value instead.
+	 */
+	public final String getQuantity() { return quantity; }
 
-    public FoodItem(String name, boolean isPinned, long quantityNum, String categoryId)
-    {
-        this(name, isPinned, QuantityType.NUMERICAL, String.valueOf(quantityNum), categoryId);
-    }
+	/**
+	 * For setting database value. Use long param version instead.
+	 */
+	public void setQuantity(String quantity) { this.quantity = quantity; }
 
-    public FoodItem(String name, boolean isPinned, QuantityApprox quantityApprox, String categoryId)
-    {
-        this(name, isPinned, QuantityType.APPROXIMATE, quantityApprox.toString(), categoryId);
-    }
+	public final long GetQuantity() { return Long.parseLong(quantity);}
+	public void SetQuantity(long quantity) { this.quantity = String.valueOf(quantity); }
 
-    public FoodItem(String name, boolean isPinned, QuantityType quantityType, String categoryId)
-    {
-        this(name, isPinned, quantityType,
-                (quantityType == QuantityType.NUMERICAL ?
-                String.valueOf(1): QuantityApprox.NORMAL.toString()),
-                categoryId);
-    }
+	public String getCategoryId() { return categoryId; }
+	public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
 
-    public final String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public final boolean getIsPinned() { return isPinned; }
-    public void setIsPinned(boolean isPinned) { this.isPinned = isPinned; }
-
-    public final QuantityType getQuantityType() { return QuantityType.valueOf(quantityType); }
-    public void setQuantityType(QuantityType quantityType) { this.quantityType = quantityType.toString(); }
-
-    /**
-     * For retrieving database value ONLY. Use long or enum return value instead.
-     */
-    public final String getQuantity() { return quantity; }
-
-    /**
-     * For setting database value ONLY. Use long or enum param version instead.
-     */
-    public void setQuantity(String quantity) { this.quantity = quantity; }
-
-    public final long GetQuantityLong() { return Long.parseLong(quantity);}
-    public void SetQuantityLong(long quantity) { this.quantity = String.valueOf(quantity); }
-
-    public final QuantityApprox GetQuantityEnum() { return QuantityApprox.valueOf(quantity); }
-    public void SetQuantityEnum(QuantityApprox quantity) { this.quantity = quantity.toString(); }
-
-    public String getCategoryId() { return categoryId; }
-    public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
-
-    public String getFoodId() { return foodId; }
-    public void setFoodId(String foodId) { this.foodId = foodId; }
+	public String getFoodId() { return foodId; }
+	public void setFoodId(String foodId) { this.foodId = foodId; }
 }

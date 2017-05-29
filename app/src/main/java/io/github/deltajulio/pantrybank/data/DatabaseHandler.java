@@ -74,16 +74,6 @@ public class DatabaseHandler
 				.child(FoodItem.NAME).setValue(name);
 	}
 
-    public void UpdateQuantityType(String foodId, FoodItem.QuantityType quantityType)
-    {
-        databaseReference
-                .child(USER_PATH)
-                .child(userId)
-                .child(ITEMS)
-                .child(foodId)
-                .child(FoodItem.QUANTITY_TYPE).setValue(quantityType);
-    }
-
     private void UpdateQuantity(String foodId, String quantity)
     {
         databaseReference
@@ -94,14 +84,9 @@ public class DatabaseHandler
                 .child(FoodItem.QUANTITY).setValue(quantity);
     }
 
-    public void UpdateQuantityLong(String foodId, long quantity)
+    public void UpdateQuantity(String foodId, long quantity)
     {
         UpdateQuantity(foodId, String.valueOf(quantity));
-    }
-
-    public void UpdateQuantityEnum(String foodId, FoodItem.QuantityApprox quantity)
-    {
-        UpdateQuantity(foodId, quantity.toString());
     }
 
     public void UpdateIsPinned(String foodId, boolean isPinned)

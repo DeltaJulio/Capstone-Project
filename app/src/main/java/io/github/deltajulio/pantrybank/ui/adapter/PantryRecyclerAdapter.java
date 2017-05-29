@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ToggleButton;
 
 import com.google.firebase.database.Query;
 
@@ -43,19 +42,9 @@ public class PantryRecyclerAdapter extends BaseRecyclerAdapter implements Pantry
 			return true;
 		}
 
-		if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
+		if (item.GetQuantity() == 0)
 		{
-			if (Integer.valueOf(item.getQuantity()) == 0)
-			{
-				return false;
-			}
-		} else // enum quantity type
-		{
-			if (FoodItem.QuantityApprox.valueOf(item.getQuantity()) ==
-					FoodItem.QuantityApprox.NONE_REMAINING)
-			{
-				return false;
-			}
+			return false;
 		}
 
 		return true;
@@ -90,14 +79,7 @@ public class PantryRecyclerAdapter extends BaseRecyclerAdapter implements Pantry
 		foodHolder.SetOnClickListener(this);
 		foodHolder.SetItemName(item.getName());
 		foodHolder.SetIsPinned(item.getIsPinned());
-
-		if (item.getQuantityType() == FoodItem.QuantityType.NUMERICAL)
-		{
-			foodHolder.SetItemQuantity(String.valueOf(item.GetQuantityLong()));
-		} else
-		{
-			foodHolder.SetItemQuantity(item.GetQuantityEnum().toString());
-		}
+		foodHolder.SetItemQuantity(item.getQuantity());
 	}
 
 	@Override

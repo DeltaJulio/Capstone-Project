@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -90,6 +89,7 @@ public class NewItemActivity extends AppCompatActivity
 		categorySpinner = (AppCompatSpinner) findViewById(R.id.category_spinner);
 		pinnedSwitch = (SwitchCompat) findViewById(R.id.pinned_switch);
 		quantityText = (TextInputEditText) findViewById(R.id.item_quantity);
+		quantityText.setText("0");
 		quantityContainer = (TextInputLayout) findViewById(R.id.quantity_long_container);
 		deleteButton = (Button) findViewById(R.id.button_delete);
 
@@ -100,7 +100,8 @@ public class NewItemActivity extends AppCompatActivity
 			@Override
 			public void onClick(View v)
 			{
-				int currentQuantity = Integer.valueOf(quantityText.getText().toString());
+				String quantityString = quantityText.getText().toString();
+				int currentQuantity = quantityString.equals("") ? 0 : Integer.valueOf(quantityString);
 				quantityText.setText(String.valueOf(++currentQuantity));
 			}
 		});
@@ -110,8 +111,10 @@ public class NewItemActivity extends AppCompatActivity
 			@Override
 			public void onClick(View v)
 			{
-				int currentQuantity = Integer.valueOf(quantityText.getText().toString());
-				quantityText.setText(String.valueOf(--currentQuantity));
+				String quantityString = quantityText.getText().toString();
+				int currentQuantity = quantityString.equals("") ? 0 : Integer.valueOf(quantityString);
+				int newQuantity = --currentQuantity >= 0 ? currentQuantity : 0;
+				quantityText.setText(String.valueOf(newQuantity));
 			}
 		});
 
@@ -196,7 +199,7 @@ public class NewItemActivity extends AppCompatActivity
 		nameText.setText(foodItem.getName());
 
 		// Populate quantity field
-		long quantity = foodItem.GetQuantityLong();
+		long quantity = foodItem.GetQuantity();
 		quantityText.setText(String.valueOf(quantity));
 
 		// Populate pinned switch
@@ -330,12 +333,13 @@ public class NewItemActivity extends AppCompatActivity
 
 		// update quantity
 		long quantity = Long.valueOf(quantityText.getText().toString());
-		if (quantity != foodItem.GetQuantityLong())
+		if (quantity != foodItem.GetQuantity())
 		{
-			databaseHandler.UpdateQuantityLong(foodItem.getFoodId(), quantity);
+			databaseHandler.UpdateQuantity(foodItem.getFoodId(), quantity);
 		}
 
-		// update category
+		/* update category */
+
 		// find category ID
 		String categoryName = categorySpinner.getSelectedItem().toString();
 		String categoryId = null;
