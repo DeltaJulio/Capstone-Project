@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import io.github.deltajulio.pantrybank.auth.LoginActivity;
@@ -26,9 +27,11 @@ import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
 
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
 {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRA_ACTION = "io.github.deltajulio.pantrybank.ACTION";
     public static final String FOOD_ITEM = "io.github.deltajulio.pantrybank.FOOD_ITEM";
+
+    private static boolean firstRun = true;
 
     /**
      * Firebase Objects
@@ -54,6 +57,13 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
         pantryTab = (TabItem) findViewById(R.id.tab_pantry);
         listTab = (TabItem) findViewById(R.id.tab_list);
         recipeTab = (TabItem) findViewById(R.id.tab_recipes);
+
+        // Enable data persistence
+        if (firstRun)
+        {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            firstRun = false;
+        }
 
         // Verify that the user is logged in
         auth = FirebaseAuth.getInstance();
@@ -82,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
 
                     // Create databaseHandler handler
                     databaseHandler = new DatabaseHandler(auth.getCurrentUser().getUid());
+
+                    // Keep data synced
+                    DatabaseReference userRef = FirebaseDatabase.getInstance()
+                        .getReference(DatabaseHandler.USER_PATH).child(databaseHandler.GetUserId());
+                    userRef.keepSynced(true);
 
                     // TODO: find a better solution
                     AddDefaultCategory();
