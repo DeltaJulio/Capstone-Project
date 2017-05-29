@@ -1,6 +1,7 @@
 package io.github.deltajulio.pantrybank;
 
 import android.os.Handler;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -301,7 +302,8 @@ public class NewItemActivity extends AppCompatActivity
 		}
 
 		// find quantity
-		long quantity = Long.valueOf(quantityText.getText().toString());
+		String quantityString = quantityText.getText().toString();
+		long quantity = quantityString.equals("") ? 0 : Long.valueOf(quantityString);
 
 		//find isPinned
 		boolean isPinned = pinnedSwitch.isChecked();
