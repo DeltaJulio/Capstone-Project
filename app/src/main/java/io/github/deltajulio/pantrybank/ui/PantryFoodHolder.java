@@ -1,5 +1,6 @@
 package io.github.deltajulio.pantrybank.ui;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,11 @@ public class PantryFoodHolder extends RecyclerView.ViewHolder implements View.On
     public void SetItemQuantity(String quantity) { itemQuantity.setText(quantity.toLowerCase()); }
 
     public void SetIsPinned(boolean isPinned) { itemPin.setChecked(isPinned); }
+
+    public void ToggleQuantityColor(boolean isRed)
+    {
+        itemQuantity.setTextColor(isRed ? Color.RED : Color.GRAY);
+    }
 
     public PantryOnClickListener GetOnClickListener() { return onClickListener; }
 

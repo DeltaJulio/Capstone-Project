@@ -80,6 +80,9 @@ public class PantryRecyclerAdapter extends BaseRecyclerAdapter implements Pantry
 		foodHolder.SetItemName(item.getName());
 		foodHolder.SetIsPinned(item.getIsPinned());
 		foodHolder.SetItemQuantity(item.getQuantity());
+
+		// turn quantity text red (if pinned and value == 0)
+		foodHolder.ToggleQuantityColor(item.getIsPinned() && item.GetQuantity() == 0);
 	}
 
 	@Override
