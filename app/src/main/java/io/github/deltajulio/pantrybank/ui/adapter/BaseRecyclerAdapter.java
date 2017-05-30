@@ -17,8 +17,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
+import io.github.deltajulio.pantrybank.FoodKey;
 import io.github.deltajulio.pantrybank.R;
 import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.FoodItem;
@@ -40,9 +42,9 @@ public abstract class BaseRecyclerAdapter
 	// Stored copy of our categories, used to sort data by category name
 	private HashMap<String, Category> allCategories;
 	// Categories that are VISIBLE. (has corresponding FoodItems that are also visible)
-	private HashMap<String, Category> visibleCategories;
+	protected HashMap<String, Category> visibleCategories;
 	// List of food items, to be used by the adapter
-	private TreeMap<FoodKey, FoodItem> sortedFood;
+	protected TreeMap<FoodKey, FoodItem> sortedFood;
 
 	// Category vars
 	private static final int categoryResourceId = R.layout.category;
@@ -282,7 +284,7 @@ public abstract class BaseRecyclerAdapter
 	@Override
 	public int getItemViewType(int position)
 	{
-		if (IsCategoryPosition(position))
+		if (IsCategoryPosition(visibleCategories, sortedFood, position))
 		{
 			return CATEGORY_TYPE;
 		} else
@@ -330,13 +332,14 @@ public abstract class BaseRecyclerAdapter
 		visibleCategories.remove(categoryId);
 	}
 
-	protected final boolean IsCategoryPosition(int position)
+	public static final boolean IsCategoryPosition(Map<String, Category> categories,
+	                                               TreeMap<FoodKey, FoodItem> food, int position)
 	{
 		int i = 0;
 		// iterate through categories
-		for (String categoryKey : visibleCategories.keySet())
+		for (String categoryKey : categories.keySet())
 		{
-			String categoryId = visibleCategories.get(categoryKey).getCategoryId();
+			String categoryId = categories.get(categoryKey).getCategoryId();
 
 			// check if position is a Category
 			if (i == position)
@@ -344,7 +347,7 @@ public abstract class BaseRecyclerAdapter
 				return true;
 			}
 			// iterate through FoodItems
-			for (FoodItem foodItem : sortedFood.values())
+			for (FoodItem foodItem : food.values())
 			{
 				// only count items under the current category
 				if (foodItem.getCategoryId().equals(categoryId))
@@ -398,34 +401,6 @@ public abstract class BaseRecyclerAdapter
 		Log.d(TAG, String.valueOf(visibleCategories.size()));
 
 		throw null;
-	}
-
-	/**
-	 *
-	 */
-	private class FoodKey implements Comparable<FoodKey>
-	{
-		public String categoryName;
-		public String foodName;
-
-		public FoodKey(String categoryName, String foodName)
-		{
-			this.categoryName = categoryName;
-			this.foodName = foodName;
-		}
-
-		@Override
-		public int compareTo(@NonNull FoodKey o)
-		{
-			int categoryCompare = categoryName.compareTo(o.categoryName);
-			if (categoryCompare != 0)
-			{
-				return categoryCompare;
-			} else
-			{
-				return foodName.compareTo(o.foodName);
-			}
-		}
 	}
 
 	private class CategoryHolder extends RecyclerView.ViewHolder

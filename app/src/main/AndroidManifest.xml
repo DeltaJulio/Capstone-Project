@@ -22,20 +22,25 @@
         <activity
             android:name=".auth.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".auth.RegistrationActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"
+            />
         <activity
             android:name=".NewItemActivity"
             android:label="@string/title_activity_new_item"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            >
-        </activity>
+            />
+        <activity
+            android:name=".FoodListActivity"
+            android:label="@string/title_activity_food_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            />
     </application>
 
 </manifest>

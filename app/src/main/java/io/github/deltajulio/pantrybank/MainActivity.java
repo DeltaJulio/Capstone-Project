@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
     TabLayout tabLayout;
     TabItem pantryTab;
     TabItem listTab;
-    TabItem recipeTab;
+    // unimplemented
+    //TabItem recipeTab;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         pantryTab = (TabItem) findViewById(R.id.tab_pantry);
         listTab = (TabItem) findViewById(R.id.tab_list);
-        recipeTab = (TabItem) findViewById(R.id.tab_recipes);
+        // unimplemented
+        //recipeTab = (TabItem) findViewById(R.id.tab_recipes);
 
         // Enable data persistence
         if (firstRun)
@@ -123,9 +125,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
             {
                 if (databaseHandler != null)
                 {
-                    // Launch new item activity
-                    Intent intent = new Intent(MainActivity.this, NewItemActivity.class);
-                    intent.putExtra(EXTRA_ACTION, NewItemActivity.NEW);
+                    // Launch FoodListActivity
+                    Intent intent = new Intent(MainActivity.this, FoodListActivity.class);
                     startActivity(intent);
                 }
             }

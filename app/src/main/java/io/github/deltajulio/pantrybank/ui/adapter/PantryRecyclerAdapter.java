@@ -67,7 +67,7 @@ public class PantryRecyclerAdapter extends BaseRecyclerAdapter implements Pantry
 	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
 			throws NullPointerException
 	{
-		if (IsCategoryPosition(position))
+		if (IsCategoryPosition(visibleCategories, sortedFood, position))
 		{
 			super.onBindViewHolder(holder, position);
 			return;
