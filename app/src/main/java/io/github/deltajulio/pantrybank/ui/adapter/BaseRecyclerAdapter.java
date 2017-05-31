@@ -316,7 +316,7 @@ public abstract class BaseRecyclerAdapter
 	 * @throws NullPointerException In the event that no such category exists, throw a NPE. This would
 	 * be a fatal error.
 	 */
-	private void UpdateCategoryVisibility(String categoryId) throws NullPointerException
+	protected final void UpdateCategoryVisibility(String categoryId) throws NullPointerException
 	{
 		Category category = allCategories.get(categoryId);
 

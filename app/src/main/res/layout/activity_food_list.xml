@@ -21,6 +21,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="?attr/actionBarSize"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/food_list_item"
         />

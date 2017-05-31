@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -65,6 +68,14 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 		setContentView(R.layout.activity_food_list);
 		allCategories = new TreeMap<>();
 		sortedFood = new TreeMap<>();
+
+		// Set toolbar as app bar
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		// Enable up navigation button on app bar
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		// Initialize view objects
 		recyclerView = (RecyclerView) findViewById(R.id.food_list);

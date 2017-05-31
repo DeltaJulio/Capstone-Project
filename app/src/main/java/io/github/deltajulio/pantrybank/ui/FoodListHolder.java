@@ -1,8 +1,11 @@
 package io.github.deltajulio.pantrybank.ui;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.github.deltajulio.pantrybank.R;
@@ -14,6 +17,7 @@ public class FoodListHolder extends RecyclerView.ViewHolder implements View.OnCl
 
 	private TextView itemName;
 	private ImageButton buttonDelete;
+	private RelativeLayout containerView;
 
 	private FoodListAdapter adapter;
 
@@ -22,6 +26,7 @@ public class FoodListHolder extends RecyclerView.ViewHolder implements View.OnCl
 		super(itemView);
 		this.adapter = adapter;
 
+		containerView = (RelativeLayout) itemView.findViewById(R.id.food_list_container);
 		itemName = (TextView) itemView.findViewById(R.id.item_text);
 		buttonDelete = (ImageButton) itemView.findViewById(R.id.button_delete);
 
@@ -30,12 +35,21 @@ public class FoodListHolder extends RecyclerView.ViewHolder implements View.OnCl
 
 	public void SetItemName(String name) { itemName.setText(name); }
 
+	public void SetOnItemClick()
+	{
+		containerView.setOnClickListener(this);
+	}
+
 	@Override
 	public void onClick(View v)
 	{
+		Log.d(TAG, String.valueOf(v.getId()));
 		if (v.getId() == buttonDelete.getId())
 		{
 			adapter.OnDeleteClicked(getAdapterPosition());
+		} else if (v.getId() == containerView.getId())
+		{
+			adapter.OnFoodItemClicked(getAdapterPosition());
 		}
 	}
 }

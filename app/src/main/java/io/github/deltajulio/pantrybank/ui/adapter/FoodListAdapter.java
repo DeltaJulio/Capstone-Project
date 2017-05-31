@@ -78,6 +78,19 @@ public class FoodListAdapter extends BaseRecyclerAdapter
 
 		FoodListHolder foodHolder = (FoodListHolder) holder;
 		foodHolder.SetItemName(item.getName());
+		foodHolder.SetOnItemClick();
+	}
+
+	public void OnFoodItemClicked(int position)
+	{
+		PositionResult result = GetObjectAtPosition(position);
+		if (result.foodItem == null)
+		{
+			Log.e(TAG, "OnFoodItemClicked: foodItem was NULL.");
+			return;
+		}
+
+		mainListener.LaunchEditItemActivity(result.foodItem);
 	}
 
 	public void OnDeleteClicked(int position)
@@ -86,9 +99,19 @@ public class FoodListAdapter extends BaseRecyclerAdapter
 		if (result.foodItem == null)
 		{
 			Log.e(TAG, "OnDeleteClicked: foodItem was NULL.");
-			throw null;
+			return;
 		}
 
-		mainListener.LaunchEditItemActivity(result.foodItem);
+		String categoryName = null;
+		for (Category category : visibleCategories.values())
+		{
+			if (category.getCategoryId() == result.foodItem.getCategoryId())
+			{
+				categoryName = category.getName();
+			}
+		}
+		sortedFood.remove(new FoodKey(categoryName, result.foodItem.getName()));
+		UpdateCategoryVisibility(result.foodItem.getCategoryId());
+		notifyDataSetChanged();
 	}
 }
