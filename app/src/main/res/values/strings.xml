@@ -42,6 +42,10 @@
     <string name="label_pinned">Pinned ?</string>
     <string name="button_delete">Delete Item</string>
 
+    <!-- Food List Activity -->
+    <string name="search_hint">Add an item</string>
+    <string name="action_search">Search</string>
+
     <!-- Quantity types -->
     <string-array name="quantity_types">
         <item>Numerical</item>
