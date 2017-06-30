@@ -1,16 +1,23 @@
 package io.github.deltajulio.pantrybank;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -129,6 +136,66 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 				throw databaseError.toException();
 			}
 		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.appbar_food_list, menu);
+
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+
+		// verify search objects are valid
+		if (searchItem == null)
+		{
+			Log.e(TAG, "searchItem is NULL");
+			return false;
+		}
+		SearchView searchView = (SearchView) searchItem.getActionView();
+		if (searchView == null)
+		{
+			Log.e(TAG, "searchView is NULL");
+			return false;
+		}
+
+		// Hide back button while search is open
+		MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener()
+		{
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item)
+			{
+				getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item)
+			{
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+				return true;
+			}
+		});
+
+		// fixes the view not taking up enough space in the toolbar
+		searchView.setMaxWidth(Integer.MAX_VALUE);
+
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+		{
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText)
+			{
+				return false;
+			}
+		});
+
+		return true;
 	}
 
 	private void PopulateListView()
