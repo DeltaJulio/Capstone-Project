@@ -1,10 +1,8 @@
 package io.github.deltajulio.pantrybank;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -19,11 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import io.github.deltajulio.pantrybank.data.Category;
@@ -62,6 +54,7 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 
 	// View Objects
 	private RecyclerView recyclerView;
+	private FoodListAdapter recyclerAdapter;
 
 	// Sorted copy of Categories. Sorted by name.
 	private TreeMap<String, Category> allCategories;
@@ -152,6 +145,7 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 			Log.e(TAG, "searchItem is NULL");
 			return false;
 		}
+
 		SearchView searchView = (SearchView) searchItem.getActionView();
 		if (searchView == null)
 		{
@@ -159,23 +153,23 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 			return false;
 		}
 
-		// Hide back button while search is open
-		MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener()
+		// MenuItem search listener workaround
+		// https://issuetracker.google.com/issues/36940858
+		MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener()
 		{
 			@Override
-			public boolean onMenuItemActionExpand(MenuItem item)
+			public boolean onMenuItemActionCollapse(MenuItem item)
 			{
-				getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 				return true;
 			}
 
 			@Override
-			public boolean onMenuItemActionCollapse(MenuItem item)
+			public boolean onMenuItemActionExpand(MenuItem item)
 			{
-				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 				return true;
 			}
-		});
+		};
+		MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
 
 		// fixes the view not taking up enough space in the toolbar
 		searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -191,7 +185,10 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 			@Override
 			public boolean onQueryTextChange(String newText)
 			{
-				return false;
+				View parent = findViewById(R.id.food_list_activity);
+				Snackbar.make(parent, newText, Snackbar.LENGTH_SHORT).show();
+				recyclerAdapter.SetFilter(newText);
+				return true;
 			}
 		});
 
@@ -203,7 +200,7 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-		BaseRecyclerAdapter recyclerAdapter = new FoodListAdapter(categoriesRef, itemsRef, this, this);
+		recyclerAdapter = new FoodListAdapter(categoriesRef, itemsRef, this, this);
 		recyclerView.setAdapter(recyclerAdapter);
 	}
 

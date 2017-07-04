@@ -35,6 +35,7 @@ public class FoodListAdapter extends BaseRecyclerAdapter
 
 	private final DatabaseHandler databasehandler;
 	private MainFragmentListener mainListener;
+	private String filter;
 
 	public FoodListAdapter(Query categoriesRef, Query itemsRef, MainFragmentListener mainListener,
 	                       Context context)
@@ -42,12 +43,22 @@ public class FoodListAdapter extends BaseRecyclerAdapter
 		super(categoriesRef, itemsRef, context);
 		this.mainListener = mainListener;
 		databasehandler = mainListener.GetDatabase();
+		filter = "";
+	}
+
+	/**
+	 * Sets the string used to check whether a FoodItem should be displayed.
+	 */
+	public void SetFilter(String filter)
+	{
+		this.filter = filter;
+		AddListeners();
 	}
 
 	@Override
 	protected boolean ShouldBeDisplayed(FoodItem item)
 	{
-		return true;
+		return filter.equals("") || item.getName().contains(filter);
 	}
 
 	@Override

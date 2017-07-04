@@ -61,6 +61,13 @@ public abstract class BaseRecyclerAdapter
 		visibleCategories = new HashMap<>();
 		sortedFood = new TreeMap<>();
 
+		AddListeners();
+	}
+
+	protected void AddListeners()
+	{
+		RemoveListeners();
+
 		// Monitor changes to allCategories
 		categoryListener = new ChildEventListener()
 		{
@@ -132,23 +139,14 @@ public abstract class BaseRecyclerAdapter
 			{
 				// create FoodItem from data snapshot
 				FoodItem item = dataSnapshot.getValue(FoodItem.class);
-				if (!ShouldBeDisplayed(item))
-				{
-					return;
-				}
 
 				// find category name
 				Pair<Boolean, String> result = GetCategoryName(item.getCategoryId());
-				if (result.first)
-				{
-					// add to container
-					sortedFood.put(new FoodKey(result.second, item.getName()), item);
-				} else
+				if (!result.first)
 				{
 					// category was not found, delay (wait for database to finish syncing)
-					Log.w(TAG, "itemListener:onChildAdded: category was not found. Retrying!");
-					Handler handler = new Handler();
-					handler.postDelayed(new Runnable()
+					Log.v(TAG, "itemListener:onChildAdded: category was not found. Retrying!");
+					new Handler().postDelayed(new Runnable()
 					{
 						@Override
 						public void run()
@@ -157,6 +155,19 @@ public abstract class BaseRecyclerAdapter
 						}
 					}, 100);
 					return;
+				}
+
+				// create FoodKey
+				FoodKey foodkey = new FoodKey(result.second, item.getName());
+
+				if (!ShouldBeDisplayed(item))
+				{
+					// Remove old copy
+					sortedFood.remove(foodkey);
+				} else
+				{
+					// add to container
+					sortedFood.put(foodkey, item);
 				}
 
 				UpdateCategoryVisibility(item.getCategoryId());
@@ -254,8 +265,16 @@ public abstract class BaseRecyclerAdapter
 	 */
 	public void RemoveListeners()
 	{
-		categoriesRef.removeEventListener(categoryListener);
-		itemsRef.removeEventListener(itemListener);
+		if (categoryListener != null)
+		{
+			categoriesRef.removeEventListener(categoryListener);
+			categoryListener = null;
+		}
+		if (itemListener != null)
+		{
+			itemsRef.removeEventListener(itemListener);
+			itemListener = null;
+		}
 	}
 
 	@Override
