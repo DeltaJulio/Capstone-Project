@@ -27,4 +27,15 @@
         tools:listitem="@layout/food_list_item"
         />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_add_white_24px"
+        app:layout_anchor="@id/food_list"
+        app:layout_anchorGravity="bottom|right|end"
+        />
+
 </android.support.design.widget.CoordinatorLayout>

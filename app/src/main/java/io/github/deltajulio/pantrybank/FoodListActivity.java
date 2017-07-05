@@ -2,6 +2,7 @@ package io.github.deltajulio.pantrybank;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
@@ -79,6 +80,23 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 
 		// Initialize view objects
 		recyclerView = (RecyclerView) findViewById(R.id.food_list);
+
+		// setup FAB onclick
+		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+		fab.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				if (databaseHandler != null)
+				{
+					// Launch NewItemActivity
+					Intent intent = new Intent(FoodListActivity.this, NewItemActivity.class);
+					intent.putExtra(EXTRA_ACTION, NewItemActivity.NEW);
+					startActivity(intent);
+				}
+			}
+		});
 
 		DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 		databaseHandler = null;
