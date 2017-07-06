@@ -2,6 +2,7 @@ package io.github.deltajulio.pantrybank;
 
 import android.os.Handler;
 import android.support.annotation.IntegerRes;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -10,10 +11,14 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,6 +26,7 @@ import android.widget.ImageButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -42,6 +48,10 @@ public class NewItemActivity extends AppCompatActivity
 	 * Firebase Objects
 	 */
 	private DatabaseHandler databaseHandler;
+
+	// Only available when editing an item
+	private FoodItem existingFoodItem;
+	private String oldName = "";
 
 	/**
 	 * View Objects
@@ -119,8 +129,69 @@ public class NewItemActivity extends AppCompatActivity
 			}
 		});
 
+		// Text Listener to check if user is adding an already saved FoodItem. Instead of creating a new
+		// entry of (x), we edit the found FoodItem.
+		nameText.addTextChangedListener(new TextWatcher()
+		{
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			{
+				// intentionally left blank
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+				// intentionally left blank
+			}
+
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				final String string = s.toString();
+				if (oldName.equals(string))
+				{
+					return;
+				}
+				oldName = string;
+
+				DatabaseReference items = databaseHandler.GetFoodItems();
+				items.addListenerForSingleValueEvent(new ValueEventListener()
+				{
+					@Override
+					public void onDataChange(DataSnapshot dataSnapshot)
+					{
+						for (DataSnapshot child : dataSnapshot.getChildren())
+						{
+							FoodItem foodItem = child.getValue(FoodItem.class);
+							if (foodItem.getName().equalsIgnoreCase(string))
+							{
+								// match found, set activity to edit mode.
+								intentAction = EDIT;
+								existingFoodItem = foodItem;
+								PopulateInputFields();
+								return;
+							}
+						}
+						// no match found. make sure activity is in new mode
+						intentAction = NEW;
+						existingFoodItem = null;
+					}
+
+					@Override
+					public void onCancelled(DatabaseError databaseError)
+					{
+						Log.d(TAG, "onCreate:afterTextChanged:onCancelled", databaseError.toException());
+					}
+				});
+			}
+		});
+
 		if (intentAction.equals(EDIT))
 		{
+			// grab FoodItem from intent
+			existingFoodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+
 			// Change activity title based on bundle extras
 			actionBar.setTitle(R.string.title_activity_edit_item);
 
@@ -194,17 +265,24 @@ public class NewItemActivity extends AppCompatActivity
 			return;
 		}
 
-		FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+		// When the soft keyboard is open and the focused text is changed, the keyboard is not cleanly
+		// exited. This needs to be done manually.
+		View view = getCurrentFocus();
+		if (view != null)
+		{
+			InputMethodManager inputManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+			inputManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
 
 		// Populate name field
-		nameText.setText(foodItem.getName());
+		nameText.setText(existingFoodItem.getName());
 
 		// Populate quantity field
-		long quantity = foodItem.GetQuantity();
+		long quantity = existingFoodItem.GetQuantity();
 		quantityText.setText(String.valueOf(quantity));
 
 		// Populate pinned switch
-		pinnedSwitch.setChecked(foodItem.getIsPinned());
+		pinnedSwitch.setChecked(existingFoodItem.getIsPinned());
 
 		/**
 		 * Select the desired category in categorySpinner. Since FoodItem stores the ID of the
@@ -216,7 +294,7 @@ public class NewItemActivity extends AppCompatActivity
 				.child(DatabaseHandler.USER_PATH)
 				.child(databaseHandler.GetUserId())
 				.child(DatabaseHandler.CATEGORIES)
-				.child(foodItem.getCategoryId()).addListenerForSingleValueEvent(new ValueEventListener()
+				.child(existingFoodItem.getCategoryId()).addListenerForSingleValueEvent(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot)
@@ -246,7 +324,7 @@ public class NewItemActivity extends AppCompatActivity
 			@Override
 			public void onCancelled(DatabaseError databaseError)
 			{
-					Log.w(TAG, "PopulateInputFields:onCancelled", databaseError.toException());
+				Log.w(TAG, "PopulateInputFields:onCancelled", databaseError.toException());
 			}
 		});
 	}
@@ -324,20 +402,24 @@ public class NewItemActivity extends AppCompatActivity
 	 */
 	private void UpdateItem()
 	{
-		final FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+		if (!intentAction.equals(EDIT))
+		{
+			Log.e(TAG, "UpdateItem: was not called in EDIT mode! Aborting.");
+			return;
+		}
 
 		// update name
 		String name = nameText.getText().toString();
-		if (!name.equals(foodItem.getName()))
+		if (!name.equals(existingFoodItem.getName()))
 		{
-			databaseHandler.UpdateName(foodItem.getFoodId(), name);
+			databaseHandler.UpdateName(existingFoodItem.getFoodId(), name);
 		}
 
 		// update quantity
 		long quantity = Long.valueOf(quantityText.getText().toString());
-		if (quantity != foodItem.GetQuantity())
+		if (quantity != existingFoodItem.GetQuantity())
 		{
-			databaseHandler.UpdateQuantity(foodItem.getFoodId(), quantity);
+			databaseHandler.UpdateQuantity(existingFoodItem.getFoodId(), quantity);
 		}
 
 		/* update category */
@@ -352,9 +434,9 @@ public class NewItemActivity extends AppCompatActivity
 				categoryId = child.child(Category.ID).getValue().toString();
 			}
 		}
-		if (categoryId != null && !categoryId.equals(foodItem.getCategoryId()))
+		if (categoryId != null && !categoryId.equals(existingFoodItem.getCategoryId()))
 		{
-			databaseHandler.UpdateCategory(foodItem.getFoodId(), categoryId);
+			databaseHandler.UpdateCategory(existingFoodItem.getFoodId(), categoryId);
 		} else if (categoryId == null)
 		{
 			Log.e(TAG, "UpdateItem: categoryId was NULL");
@@ -362,9 +444,9 @@ public class NewItemActivity extends AppCompatActivity
 
 		// update isPinned
 		boolean isPinned = pinnedSwitch.isChecked();
-		if (isPinned != foodItem.getIsPinned())
+		if (isPinned != existingFoodItem.getIsPinned())
 		{
-			databaseHandler.UpdateIsPinned(foodItem.getFoodId(), isPinned);
+			databaseHandler.UpdateIsPinned(existingFoodItem.getFoodId(), isPinned);
 		}
 
 		// return to main activity
