@@ -23,6 +23,7 @@
             android:name=".auth.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme"
+            android:launchMode="singleTask"
             />
         <activity
             android:name=".auth.RegistrationActivity"
