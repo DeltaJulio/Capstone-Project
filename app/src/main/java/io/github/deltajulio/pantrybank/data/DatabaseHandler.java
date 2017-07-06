@@ -38,6 +38,20 @@ public class DatabaseHandler
         return userId;
     }
 
+    public DatabaseReference GetFoodItems()
+    {
+	    return databaseReference.child(USER_PATH)
+			    .child(userId)
+			    .child(ITEMS);
+    }
+
+    public DatabaseReference GetCategories()
+    {
+	    return databaseReference.child(USER_PATH)
+			    .child(userId)
+			    .child(CATEGORIES);
+    }
+
     public void AddItem(FoodItem foodItem)
     {
         String foodId = databaseReference
