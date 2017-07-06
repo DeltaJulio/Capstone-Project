@@ -203,8 +203,6 @@ public class FoodListActivity extends AppCompatActivity implements MainFragmentL
 			@Override
 			public boolean onQueryTextChange(String newText)
 			{
-				View parent = findViewById(R.id.food_list_activity);
-				Snackbar.make(parent, newText, Snackbar.LENGTH_SHORT).show();
 				recyclerAdapter.SetFilter(newText);
 				return true;
 			}
