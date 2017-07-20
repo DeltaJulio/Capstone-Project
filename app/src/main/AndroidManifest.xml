@@ -37,19 +37,19 @@
             android:name=".NewItemActivity"
             android:label="@string/title_activity_new_item"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
             android:name=".NewCategoryActivity"
             android:label="@string/title_activity_new_category"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
             android:name=".FoodListActivity"
             android:label="@string/title_activity_food_list"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
     </application>
