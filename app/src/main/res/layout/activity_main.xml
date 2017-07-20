@@ -52,15 +52,15 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <io.github.yavski.fabspeeddial.FabSpeedDial
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:fabSize="normal"
-        app:srcCompat="@drawable/ic_add_white_24px"
-        app:layout_anchor="@id/viewpager"
-        app:layout_anchorGravity="bottom|right|end"
-        />
+        android:id="@+id/fab_main"
+        android:layout_gravity="bottom|end"
+        app:fabGravity="bottom_end"
+        app:fabMenu="@menu/fab_main_activity"
+        >
+
+    </io.github.yavski.fabspeeddial.FabSpeedDial>
 
 </android.support.design.widget.CoordinatorLayout>

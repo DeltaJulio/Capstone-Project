@@ -2,6 +2,7 @@ package io.github.deltajulio.pantrybank;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
@@ -9,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,8 @@ import io.github.deltajulio.pantrybank.data.Category;
 import io.github.deltajulio.pantrybank.data.DatabaseHandler;
 import io.github.deltajulio.pantrybank.data.FoodItem;
 import io.github.deltajulio.pantrybank.ui.MainFragmentListener;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity implements MainFragmentListener
 {
@@ -117,17 +121,36 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
         };
 
         // setup FAB onclick
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
+        FabSpeedDial fab = (FabSpeedDial) findViewById(R.id.fab_main);
+        fab.setMenuListener(new SimpleMenuListenerAdapter()
         {
             @Override
-            public void onClick(View v)
+            public boolean onPrepareMenu(NavigationMenu navigationMenu)
             {
-                if (databaseHandler != null)
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem)
+            {
+                switch (menuItem.getItemId())
                 {
-                    // Launch FoodListActivity
-                    Intent intent = new Intent(MainActivity.this, FoodListActivity.class);
-                    startActivity(intent);
+                    case R.id.action_new_item:
+                    {
+                        // Launch FoodListActivity
+                        Intent intent = new Intent(MainActivity.this, FoodListActivity.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                    case R.id.action_new_category:
+                    {
+                        // Launch NewCategoryActivity
+                        Intent intent = new Intent(MainActivity.this, NewCategoryActivity.class);
+                        startActivity(intent);
+                        return true;
+                    }
+                    default:
+                        return false;
                 }
             }
         });
@@ -186,9 +209,11 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
             {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
-                    if (child.child(Category.NAME).getValue().toString()
-                            .equals(getResources().getString(R.string.uncategorized)))
+                    Category category = child.getValue(Category.class);
+
+                    if (category.getName().equals(getResources().getString(R.string.uncategorized)));
                     {
+                        databaseHandler.SetUncategorizedCategoryId(category.getCategoryId());
                         return;
                     }
                 }
@@ -203,6 +228,8 @@ public class MainActivity extends AppCompatActivity implements MainFragmentListe
                         categoryId);
 
                 ref.child(categoryId).setValue(category);
+
+                databaseHandler.SetUncategorizedCategoryId(categoryId);
 
                 Log.d(TAG, "AddDefaultCategory:onDataChange: default category created");
             }

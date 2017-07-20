@@ -5,6 +5,7 @@
     <string name="title_activity_new_item">Add new item</string>
     <string name="title_activity_edit_item">Edit item</string>
     <string name="title_activity_food_list">Add an item</string>
+    <string name="title_activity_new_category">Add new category</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -59,6 +60,14 @@
         <item>Normal</item>
         <item>Plenty</item>
     </string-array>
+
+    <!-- New Item FAB -->
+    <string name="menu_new_category">Add new category</string>
+    <string name="menu_new_item">Add an item</string>
+
+
+    <!-- Errors -->
+    <string name="error_cannot_delete_category">Could not delete category. Make sure the category is empty.</string>
 
     <string name="uncategorized">uncategorized</string>
 </resources>

@@ -73,7 +73,7 @@ public class NewItemActivity extends AppCompatActivity
 
 		intentAction = getIntent().getStringExtra(MainActivity.EXTRA_ACTION);
 
-		// Instantiate databaseHandler handler
+		// Instantiate databaseHandler
 		try
 		{
 			databaseHandler = new DatabaseHandler(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -200,20 +200,20 @@ public class NewItemActivity extends AppCompatActivity
 
 			// make the delete button visible
 			deleteButton.setVisibility(View.VISIBLE);
-
-			// set up on click listener for delete button
-			deleteButton.setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					// TODO: prompt for confirmation
-					FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
-					databaseHandler.DeleteItem(foodItem.getFoodId());
-					finish();
-				}
-			});
 		}
+
+		// set up on click listener for delete button
+		deleteButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				// TODO: prompt for confirmation
+				FoodItem foodItem = (FoodItem) getIntent().getSerializableExtra(MainActivity.FOOD_ITEM);
+				databaseHandler.DeleteItem(foodItem.getFoodId());
+				finish();
+			}
+		});
 	}
 
 	private void PopulateCategorySpinner()
