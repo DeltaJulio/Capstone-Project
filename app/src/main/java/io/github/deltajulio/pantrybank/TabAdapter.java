@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabAdapter extends FragmentPagerAdapter
 {
-    final static int PAGE_COUNT = 3;
+    final static int PAGE_COUNT = 1;
     private Context context;
 
     public TabAdapter(FragmentManager fragmentManager, Context context)
